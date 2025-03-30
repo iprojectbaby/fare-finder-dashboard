@@ -1,11 +1,10 @@
 
 import React from 'react';
-import { Star, Clock, AlertCircle, ChevronRight, Wifi, Coffee, Truck } from 'lucide-react';
+import { Star, Clock, AlertCircle, Truck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { FareData } from '../data/fakeData';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { useToast } from '@/hooks/use-toast';
 
 interface FareCardProps {
   fare: FareData;
@@ -20,15 +19,6 @@ const transportIcons: Record<string, React.ReactElement> = {
 };
 
 const FareCard: React.FC<FareCardProps> = ({ fare, onReportIssue }) => {
-  const { toast } = useToast();
-
-  const handleBooking = () => {
-    toast({
-      title: "Booking in progress",
-      description: `Processing your booking with ${fare.company}`,
-    });
-  };
-
   return (
     <div className="fare-card rounded-lg border bg-card text-card-foreground shadow">
       <div className="p-6">
@@ -95,10 +85,10 @@ const FareCard: React.FC<FareCardProps> = ({ fare, onReportIssue }) => {
           ))}
         </div>
 
-        <div className="mt-6 flex justify-between items-center">
+        <div className="mt-6 flex justify-end">
           <Dialog>
             <DialogTrigger asChild>
-              <Button variant="outline" size="sm" className="text-xs">
+              <Button variant="outline" size="sm">
                 <AlertCircle className="h-3 w-3 mr-1" />
                 Report Issue
               </Button>
@@ -147,10 +137,6 @@ const FareCard: React.FC<FareCardProps> = ({ fare, onReportIssue }) => {
               </div>
             </DialogContent>
           </Dialog>
-          <Button onClick={handleBooking} className="bg-primary hover:bg-primary/90">
-            Book Now
-            <ChevronRight className="h-4 w-4 ml-1" />
-          </Button>
         </div>
       </div>
     </div>
