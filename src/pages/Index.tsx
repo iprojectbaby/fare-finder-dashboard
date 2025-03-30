@@ -1,7 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { ArrowUp, ArrowDown, Menu } from 'lucide-react';
-import Navbar from '@/components/Navbar';
+import { ArrowUp, ArrowDown } from 'lucide-react';
 import SearchBar, { SearchParams } from '@/components/SearchBar';
 import FareCard from '@/components/FareCard';
 import ComparisonChart from '@/components/ComparisonChart';
@@ -160,149 +159,137 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Navbar />
-      
-      {/* Hero Section */}
-      <div className="gradient-bg pt-24 pb-16 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-center mb-2">Find the Best Transport Fares</h1>
-          <p className="text-center text-white/90 max-w-2xl mx-auto mb-8">
-            Compare prices across different transport companies and routes to get the best deals
-          </p>
-          <div className="mt-8">
-            <SearchBar onSearch={handleSearch} />
-          </div>
-        </div>
+    <div>
+      {/* Search Section */}
+      <div className="mb-8">
+        <SearchBar onSearch={handleSearch} />
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Main Column */}
-          <div className="lg:col-span-2">
-            <div className="bg-white rounded-lg shadow p-6 mb-8">
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
-                <h2 className="text-xl font-semibold mb-4 sm:mb-0">Available Options</h2>
-                <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 w-full sm:w-auto">
-                  <div className="hidden sm:flex space-x-2">
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      onClick={() => handleSort('price')}
-                      className={sortBy === 'price' ? 'bg-muted' : ''}
-                    >
-                      Price
-                      {sortBy === 'price' && (
-                        sortDirection === 'asc' ? 
-                          <ArrowUp className="h-3 w-3 ml-1" /> : 
-                          <ArrowDown className="h-3 w-3 ml-1" />
-                      )}
-                    </Button>
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      onClick={() => handleSort('duration')}
-                      className={sortBy === 'duration' ? 'bg-muted' : ''}
-                    >
-                      Duration
-                      {sortBy === 'duration' && (
-                        sortDirection === 'asc' ? 
-                          <ArrowUp className="h-3 w-3 ml-1" /> : 
-                          <ArrowDown className="h-3 w-3 ml-1" />
-                      )}
-                    </Button>
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      onClick={() => handleSort('rating')}
-                      className={sortBy === 'rating' ? 'bg-muted' : ''}
-                    >
-                      Rating
-                      {sortBy === 'rating' && (
-                        sortDirection === 'asc' ? 
-                          <ArrowUp className="h-3 w-3 ml-1" /> : 
-                          <ArrowDown className="h-3 w-3 ml-1" />
-                      )}
-                    </Button>
-                  </div>
-                  <div className="block sm:hidden w-full">
-                    <select 
-                      className="w-full rounded-md border border-input px-3 py-2 text-sm"
-                      value={sortBy}
-                      onChange={(e) => handleSort(e.target.value)}
-                    >
-                      <option value="price">Sort by Price</option>
-                      <option value="duration">Sort by Duration</option>
-                      <option value="rating">Sort by Rating</option>
-                    </select>
-                  </div>
-                  <div className="block sm:hidden w-full">
-                    <MobileFilters onFilterChange={handleFilter} />
-                  </div>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Main Column */}
+        <div className="lg:col-span-2">
+          <div className="bg-white rounded-lg shadow p-6 mb-8">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
+              <h2 className="text-xl font-semibold mb-4 sm:mb-0">Available Options</h2>
+              <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 w-full sm:w-auto">
+                <div className="hidden sm:flex space-x-2">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={() => handleSort('price')}
+                    className={sortBy === 'price' ? 'bg-muted' : ''}
+                  >
+                    Price
+                    {sortBy === 'price' && (
+                      sortDirection === 'asc' ? 
+                        <ArrowUp className="h-3 w-3 ml-1" /> : 
+                        <ArrowDown className="h-3 w-3 ml-1" />
+                    )}
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={() => handleSort('duration')}
+                    className={sortBy === 'duration' ? 'bg-muted' : ''}
+                  >
+                    Duration
+                    {sortBy === 'duration' && (
+                      sortDirection === 'asc' ? 
+                        <ArrowUp className="h-3 w-3 ml-1" /> : 
+                        <ArrowDown className="h-3 w-3 ml-1" />
+                    )}
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={() => handleSort('rating')}
+                    className={sortBy === 'rating' ? 'bg-muted' : ''}
+                  >
+                    Rating
+                    {sortBy === 'rating' && (
+                      sortDirection === 'asc' ? 
+                        <ArrowUp className="h-3 w-3 ml-1" /> : 
+                        <ArrowDown className="h-3 w-3 ml-1" />
+                    )}
+                  </Button>
+                </div>
+                <div className="block sm:hidden w-full">
+                  <select 
+                    className="w-full rounded-md border border-input px-3 py-2 text-sm"
+                    value={sortBy}
+                    onChange={(e) => handleSort(e.target.value)}
+                  >
+                    <option value="price">Sort by Price</option>
+                    <option value="duration">Sort by Duration</option>
+                    <option value="rating">Sort by Rating</option>
+                  </select>
+                </div>
+                <div className="block sm:hidden w-full">
+                  <MobileFilters onFilterChange={handleFilter} />
                 </div>
               </div>
-
-              {isLoading ? (
-                <div className="space-y-4">
-                  {[1, 2, 3].map((i) => (
-                    <div key={i} className="h-48 bg-gray-100 animate-pulse rounded-md"></div>
-                  ))}
-                </div>
-              ) : fares.length > 0 ? (
-                <div className="space-y-4">
-                  {fares.map((fare) => (
-                    <FareCard 
-                      key={fare.id} 
-                      fare={fare} 
-                      onReportIssue={handleReportIssue} 
-                    />
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center py-8">
-                  <h3 className="text-lg font-medium">No results found</h3>
-                  <p className="text-muted-foreground mt-2">
-                    Try adjusting your search or filter criteria
-                  </p>
-                </div>
-              )}
             </div>
+
+            {isLoading ? (
+              <div className="space-y-4">
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="h-48 bg-gray-100 animate-pulse rounded-md"></div>
+                ))}
+              </div>
+            ) : fares.length > 0 ? (
+              <div className="space-y-4">
+                {fares.map((fare) => (
+                  <FareCard 
+                    key={fare.id} 
+                    fare={fare} 
+                    onReportIssue={handleReportIssue} 
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-8">
+                <h3 className="text-lg font-medium">No results found</h3>
+                <p className="text-muted-foreground mt-2">
+                  Try adjusting your search or filter criteria
+                </p>
+              </div>
+            )}
           </div>
+        </div>
 
-          {/* Sidebar */}
-          <div className="lg:col-span-1">
-            <div className="hidden lg:block mb-6">
-              <MobileFilters onFilterChange={handleFilter} />
-            </div>
-            
-            <ComparisonChart 
-              data={fakeHistoricalPrices}
-              title="Fare Price Trends"
-              description="7-day price history for popular routes"
-            />
-            
-            <div className="bg-white rounded-lg shadow p-6 mt-6">
-              <h3 className="text-lg font-semibold mb-4">Travel Tips</h3>
-              <ul className="space-y-3 text-sm">
-                <li className="flex items-start">
-                  <span className="bg-blue-100 text-primary p-1 rounded mr-2 mt-0.5">•</span>
-                  <span>Book midweek for the best prices on most routes</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="bg-blue-100 text-primary p-1 rounded mr-2 mt-0.5">•</span>
-                  <span>Compare different transport types for the same route</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="bg-blue-100 text-primary p-1 rounded mr-2 mt-0.5">•</span>
-                  <span>Check for seasonal promotions and discounts</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="bg-blue-100 text-primary p-1 rounded mr-2 mt-0.5">•</span>
-                  <span>Some companies offer loyalty programs with significant savings</span>
-                </li>
-              </ul>
-            </div>
+        {/* Sidebar */}
+        <div className="lg:col-span-1">
+          <div className="hidden lg:block mb-6">
+            <MobileFilters onFilterChange={handleFilter} />
+          </div>
+          
+          <ComparisonChart 
+            data={fakeHistoricalPrices}
+            title="Fare Price Trends"
+            description="7-day price history for popular routes"
+          />
+          
+          <div className="bg-white rounded-lg shadow p-6 mt-6">
+            <h3 className="text-lg font-semibold mb-4">Travel Tips</h3>
+            <ul className="space-y-3 text-sm">
+              <li className="flex items-start">
+                <span className="bg-blue-100 text-primary p-1 rounded mr-2 mt-0.5">•</span>
+                <span>Book midweek for the best prices on most routes</span>
+              </li>
+              <li className="flex items-start">
+                <span className="bg-blue-100 text-primary p-1 rounded mr-2 mt-0.5">•</span>
+                <span>Compare different transport types for the same route</span>
+              </li>
+              <li className="flex items-start">
+                <span className="bg-blue-100 text-primary p-1 rounded mr-2 mt-0.5">•</span>
+                <span>Check for seasonal promotions and discounts</span>
+              </li>
+              <li className="flex items-start">
+                <span className="bg-blue-100 text-primary p-1 rounded mr-2 mt-0.5">•</span>
+                <span>Some companies offer loyalty programs with significant savings</span>
+              </li>
+            </ul>
           </div>
         </div>
       </div>
