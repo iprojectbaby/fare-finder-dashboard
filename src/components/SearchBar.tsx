@@ -1,16 +1,9 @@
 
 import React, { useState } from 'react';
-import { MapPin, Calendar, ArrowRight, Search } from 'lucide-react';
+import { MapPin, ArrowRight, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
-import { Calendar as CalendarComponent } from '@/components/ui/calendar';
 import { popularDestinations } from '@/data/fakeData';
-import { cn } from '@/lib/utils';
 
 interface SearchBarProps {
   onSearch: (params: SearchParams) => void;
@@ -19,33 +12,21 @@ interface SearchBarProps {
 export interface SearchParams {
   from: string;
   to: string;
-  date: Date | undefined;
 }
 
 const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
   const [from, setFrom] = useState('');
   const [to, setTo] = useState('');
-  const [date, setDate] = useState<Date | undefined>(undefined);
   const [showFromSuggestions, setShowFromSuggestions] = useState(false);
   const [showToSuggestions, setShowToSuggestions] = useState(false);
-  const [dateOpen, setDateOpen] = useState(false);
 
   const handleSearch = () => {
-    onSearch({ from, to, date });
-  };
-
-  const formatDate = (date?: Date) => {
-    if (!date) return 'Select date';
-    return date.toLocaleDateString('en-US', {
-      weekday: 'short',
-      month: 'short',
-      day: 'numeric',
-    });
+    onSearch({ from, to });
   };
 
   return (
     <div className="search-container p-5">
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="relative">
           <div className="flex items-center border rounded-md p-2 focus-within:ring-2 focus-within:ring-primary">
             <MapPin className="h-5 w-5 text-muted-foreground" />
@@ -120,38 +101,12 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
           )}
         </div>
 
-        <Popover open={dateOpen} onOpenChange={setDateOpen}>
-          <PopoverTrigger asChild>
-            <Button
-              variant="outline"
-              className={cn(
-                "w-full justify-start text-left font-normal",
-                !date && "text-muted-foreground"
-              )}
-            >
-              <Calendar className="mr-2 h-4 w-4" />
-              {formatDate(date)}
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-auto p-0" align="start">
-            <CalendarComponent
-              mode="single"
-              selected={date}
-              onSelect={(newDate) => {
-                setDate(newDate);
-                setDateOpen(false);
-              }}
-              initialFocus
-            />
-          </PopoverContent>
-        </Popover>
-
         <Button 
           onClick={handleSearch} 
           className="bg-primary hover:bg-primary/90 text-white py-2"
         >
           <Search className="mr-2 h-4 w-4" />
-          Search Fares
+          Find Fares
         </Button>
       </div>
     </div>

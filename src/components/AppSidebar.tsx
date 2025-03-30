@@ -46,9 +46,9 @@ export function AppSidebar() {
       <SidebarHeader className="p-4">
         <div className="flex items-center space-x-2">
           <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center">
-            <span className="font-bold text-sm">TF</span>
+            <span className="font-bold text-sm">GF</span>
           </div>
-          <div className="font-bold text-lg">TransportFare</div>
+          <div className="font-bold text-lg">Go Fare</div>
         </div>
       </SidebarHeader>
       <SidebarContent>
@@ -76,7 +76,7 @@ export function AppSidebar() {
       </SidebarContent>
       <SidebarFooter className="p-4">
         <div className="text-xs text-muted-foreground">
-          Transport Fare Finder v1.0
+          Go Fare v1.0
         </div>
       </SidebarFooter>
     </Sidebar>

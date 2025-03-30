@@ -28,7 +28,7 @@ const App = () => (
                 <div className="mb-4 flex items-center justify-between">
                   <div className="flex items-center">
                     <SidebarTrigger className="mr-2" />
-                    <h1 className="text-2xl font-bold">Transport Fare Finder</h1>
+                    <h1 className="text-2xl font-bold">Go Fare</h1>
                   </div>
                 </div>
                 <Routes>
