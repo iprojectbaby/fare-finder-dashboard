@@ -8,74 +8,60 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Check, X, Eye, Search } from 'lucide-react';
+import { Check, X, Eye } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 const CompanyManagement = () => {
   const { toast } = useToast();
   
-  // Mock data for pending verification companies
+  // Mock data for pending companies
   const [pendingCompanies, setPendingCompanies] = useState([
-    { id: '1', name: 'New Transit Co.', email: 'info@newtransit.com', contactPerson: 'John Smith', phone: '(123) 456-7890', submittedOn: '2023-08-10', status: 'pending' },
-    { id: '2', name: 'Regional Express', email: 'contact@regionalexpress.com', contactPerson: 'Jane Doe', phone: '(987) 654-3210', submittedOn: '2023-08-08', status: 'pending' },
+    { id: '1', name: 'Express Transit', type: 'Bus', contactPerson: 'John Doe', contactEmail: 'john@expresstransit.com', submittedOn: '2023-08-15', status: 'pending' },
+    { id: '2', name: 'Metro Lines', type: 'Train', contactPerson: 'Jane Smith', contactEmail: 'jane@metrolines.com', submittedOn: '2023-08-14', status: 'pending' },
+    { id: '3', name: 'City Ferries', type: 'Ferry', contactPerson: 'Robert Brown', contactEmail: 'robert@cityferries.com', submittedOn: '2023-08-12', status: 'pending' },
   ]);
   
-  // Mock data for verified companies
-  const [verifiedCompanies, setVerifiedCompanies] = useState([
-    { id: '3', name: 'Express Transit', email: 'support@expresstransit.com', contactPerson: 'Michael Johnson', phone: '(456) 789-0123', verifiedOn: '2023-07-15', status: 'verified', fareCount: 12 },
-    { id: '4', name: 'Metro Lines', email: 'info@metrolines.com', contactPerson: 'Sarah Williams', phone: '(789) 012-3456', verifiedOn: '2023-07-10', status: 'verified', fareCount: 8 },
-    { id: '5', name: 'City Ferries', email: 'booking@cityferries.com', contactPerson: 'Robert Brown', phone: '(234) 567-8901', verifiedOn: '2023-07-05', status: 'verified', fareCount: 5 },
+  // Mock data for all companies
+  const [allCompanies, setAllCompanies] = useState([
+    { id: '4', name: 'Urban Transport', type: 'Bus', contactPerson: 'Sarah Johnson', contactEmail: 'sarah@urbantransport.com', submittedOn: '2023-07-20', status: 'active' },
+    { id: '5', name: 'Rail Connect', type: 'Train', contactPerson: 'Michael Wilson', contactEmail: 'michael@railconnect.com', submittedOn: '2023-07-15', status: 'active' },
+    { id: '6', name: 'Harbor Shuttles', type: 'Ferry', contactPerson: 'Emily Davis', contactEmail: 'emily@harborshuttles.com', submittedOn: '2023-07-10', status: 'active' },
+    ...pendingCompanies.map(company => ({ ...company }))
   ]);
-  
-  // All companies combined
-  const allCompanies = [...pendingCompanies, ...verifiedCompanies];
-  
-  const [viewingCompany, setViewingCompany] = useState(null);
-  const [searchQuery, setSearchQuery] = useState('');
 
   const approveCompany = (id: string) => {
-    // Move company from pending to verified
-    const companyToApprove = pendingCompanies.find(company => company.id === id);
-    if (companyToApprove) {
-      setPendingCompanies(pendingCompanies.filter(company => company.id !== id));
-      setVerifiedCompanies([...verifiedCompanies, {
-        ...companyToApprove,
-        status: 'verified',
-        verifiedOn: new Date().toISOString().split('T')[0],
-        fareCount: 0
-      }]);
-      
-      toast({
-        title: "Company Verified",
-        description: `${companyToApprove.name} has been verified successfully.`,
-      });
-    }
+    // Update pending companies list
+    setPendingCompanies(pendingCompanies.map(company => 
+      company.id === id ? { ...company, status: 'approved' } : company
+    ));
+    
+    // Update all companies list
+    setAllCompanies(allCompanies.map(company => 
+      company.id === id ? { ...company, status: 'active' } : company
+    ));
+    
+    toast({
+      title: "Company Approved",
+      description: "The company has been verified and is now active on the platform.",
+    });
   };
 
   const rejectCompany = (id: string) => {
-    // Update status to rejected
+    // Update pending companies list
     setPendingCompanies(pendingCompanies.map(company => 
       company.id === id ? { ...company, status: 'rejected' } : company
     ));
     
-    const companyName = pendingCompanies.find(company => company.id === id)?.name;
+    // Update all companies list
+    setAllCompanies(allCompanies.map(company => 
+      company.id === id ? { ...company, status: 'rejected' } : company
+    ));
     
     toast({
       title: "Company Rejected",
-      description: `${companyName} verification has been rejected.`,
-      variant: "destructive"
+      description: "The company verification request has been rejected.",
     });
   };
-
-  const viewCompanyDetails = (company: any) => {
-    setViewingCompany(company);
-  };
-
-  const filteredCompanies = allCompanies.filter(company => 
-    company.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    company.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    company.contactPerson.toLowerCase().includes(searchQuery.toLowerCase())
-  );
 
   return (
     <div className="space-y-6">
@@ -84,14 +70,13 @@ const CompanyManagement = () => {
       <Tabs defaultValue="pending">
         <TabsList>
           <TabsTrigger value="pending">Pending Verification</TabsTrigger>
-          <TabsTrigger value="verified">Verified Companies</TabsTrigger>
           <TabsTrigger value="all">All Companies</TabsTrigger>
         </TabsList>
         
         <TabsContent value="pending" className="mt-6">
           <Card>
             <CardHeader>
-              <CardTitle>Pending Verification Requests</CardTitle>
+              <CardTitle>Pending Company Verifications</CardTitle>
               <CardDescription>Review and verify transport companies</CardDescription>
             </CardHeader>
             <CardContent>
@@ -99,8 +84,8 @@ const CompanyManagement = () => {
                 <TableHeader>
                   <TableRow>
                     <TableHead>Company Name</TableHead>
+                    <TableHead>Type</TableHead>
                     <TableHead>Contact Person</TableHead>
-                    <TableHead>Email</TableHead>
                     <TableHead>Submitted On</TableHead>
                     <TableHead>Status</TableHead>
                     <TableHead className="text-right">Actions</TableHead>
@@ -109,13 +94,13 @@ const CompanyManagement = () => {
                 <TableBody>
                   {pendingCompanies.map((company) => (
                     <TableRow key={company.id}>
-                      <TableCell className="font-medium">{company.name}</TableCell>
+                      <TableCell>{company.name}</TableCell>
+                      <TableCell>{company.type}</TableCell>
                       <TableCell>{company.contactPerson}</TableCell>
-                      <TableCell>{company.email}</TableCell>
                       <TableCell>{company.submittedOn}</TableCell>
                       <TableCell>
                         <Badge variant={
-                          company.status === 'verified' ? 'success' : 
+                          company.status === 'approved' ? 'default' : 
                           company.status === 'rejected' ? 'destructive' : 
                           'outline'
                         }>
@@ -133,7 +118,7 @@ const CompanyManagement = () => {
                             </Button>
                             <Dialog>
                               <DialogTrigger asChild>
-                                <Button variant="ghost" size="icon" onClick={() => viewCompanyDetails(company)}>
+                                <Button variant="ghost" size="icon">
                                   <Eye className="h-4 w-4" />
                                 </Button>
                               </DialogTrigger>
@@ -141,7 +126,7 @@ const CompanyManagement = () => {
                                 <DialogHeader>
                                   <DialogTitle>Company Details</DialogTitle>
                                   <DialogDescription>
-                                    Review this company's verification request.
+                                    Review the details of this company verification request.
                                   </DialogDescription>
                                 </DialogHeader>
                                 <div className="grid gap-4 py-4">
@@ -150,16 +135,16 @@ const CompanyManagement = () => {
                                     <div className="col-span-3">{company.name}</div>
                                   </div>
                                   <div className="grid grid-cols-4 items-center gap-4">
+                                    <Label className="text-right">Type</Label>
+                                    <div className="col-span-3">{company.type}</div>
+                                  </div>
+                                  <div className="grid grid-cols-4 items-center gap-4">
                                     <Label className="text-right">Contact Person</Label>
                                     <div className="col-span-3">{company.contactPerson}</div>
                                   </div>
                                   <div className="grid grid-cols-4 items-center gap-4">
-                                    <Label className="text-right">Email</Label>
-                                    <div className="col-span-3">{company.email}</div>
-                                  </div>
-                                  <div className="grid grid-cols-4 items-center gap-4">
-                                    <Label className="text-right">Phone</Label>
-                                    <div className="col-span-3">{company.phone}</div>
+                                    <Label className="text-right">Contact Email</Label>
+                                    <div className="col-span-3">{company.contactEmail}</div>
                                   </div>
                                   <div className="grid grid-cols-4 items-center gap-4">
                                     <Label className="text-right">Submitted On</Label>
@@ -187,79 +172,36 @@ const CompanyManagement = () => {
           </Card>
         </TabsContent>
         
-        <TabsContent value="verified" className="mt-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Verified Companies</CardTitle>
-              <CardDescription>View all verified transport companies</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Company Name</TableHead>
-                    <TableHead>Contact Person</TableHead>
-                    <TableHead>Email</TableHead>
-                    <TableHead>Fare Count</TableHead>
-                    <TableHead>Verified On</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {verifiedCompanies.map((company) => (
-                    <TableRow key={company.id}>
-                      <TableCell className="font-medium">{company.name}</TableCell>
-                      <TableCell>{company.contactPerson}</TableCell>
-                      <TableCell>{company.email}</TableCell>
-                      <TableCell>{company.fareCount}</TableCell>
-                      <TableCell>{company.verifiedOn}</TableCell>
-                      <TableCell className="text-right">
-                        <Button variant="ghost" size="sm">View Details</Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
-        </TabsContent>
-        
         <TabsContent value="all" className="mt-6">
           <Card>
             <CardHeader>
               <CardTitle>All Companies</CardTitle>
-              <CardDescription>Search and manage all companies</CardDescription>
+              <CardDescription>View and manage transport companies</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="flex items-center space-x-2 mb-4 relative">
-                <Search className="h-4 w-4 absolute left-3 text-muted-foreground" />
-                <Input 
-                  placeholder="Search companies..." 
-                  className="pl-9 max-w-sm"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
+              <div className="flex items-center space-x-2 mb-4">
+                <Input placeholder="Search companies..." className="max-w-sm" />
               </div>
               
               <Table>
                 <TableHeader>
                   <TableRow>
                     <TableHead>Company Name</TableHead>
+                    <TableHead>Type</TableHead>
                     <TableHead>Contact Person</TableHead>
-                    <TableHead>Email</TableHead>
                     <TableHead>Status</TableHead>
                     <TableHead className="text-right">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {filteredCompanies.map((company) => (
+                  {allCompanies.map((company) => (
                     <TableRow key={company.id}>
-                      <TableCell className="font-medium">{company.name}</TableCell>
+                      <TableCell>{company.name}</TableCell>
+                      <TableCell>{company.type}</TableCell>
                       <TableCell>{company.contactPerson}</TableCell>
-                      <TableCell>{company.email}</TableCell>
                       <TableCell>
                         <Badge variant={
-                          company.status === 'verified' ? 'default' : 
+                          company.status === 'active' ? 'default' : 
                           company.status === 'rejected' ? 'destructive' : 
                           'outline'
                         }>
@@ -267,7 +209,7 @@ const CompanyManagement = () => {
                         </Badge>
                       </TableCell>
                       <TableCell className="text-right">
-                        <Button variant="ghost" size="sm">View Details</Button>
+                        <Button variant="ghost" size="sm">View</Button>
                       </TableCell>
                     </TableRow>
                   ))}

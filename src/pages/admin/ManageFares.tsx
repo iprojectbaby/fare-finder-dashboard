@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -121,7 +120,7 @@ const AdminManageFares = () => {
                       <TableCell>{fare.submittedOn}</TableCell>
                       <TableCell>
                         <Badge variant={
-                          fare.status === 'approved' ? 'success' : 
+                          fare.status === 'approved' ? 'default' : 
                           fare.status === 'rejected' ? 'destructive' : 
                           'outline'
                         }>
