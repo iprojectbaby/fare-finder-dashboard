@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/sidebar";
 import AppSidebar from "@/components/AppSidebar";
 import Navbar from "@/components/Navbar";
+import { StrictMode } from "react";
 
 // User pages
 import Index from "./pages/Index";
@@ -30,6 +31,7 @@ import CompanyManagement from "./pages/admin/CompanyManagement";
 import UserReports from "./pages/admin/UserReports";
 import AdminAnalytics from "./pages/admin/Analytics";
 
+// Create a new QueryClient instance
 const queryClient = new QueryClient();
 
 // Check if we're on a login or register page
@@ -98,15 +100,17 @@ const AppLayout = () => {
 
 const App = () => {
   return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <AppLayout />
-        </BrowserRouter>
-      </TooltipProvider>
-    </QueryClientProvider>
+    <StrictMode>
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <AppLayout />
+          </BrowserRouter>
+        </TooltipProvider>
+      </QueryClientProvider>
+    </StrictMode>
   );
 };
 
