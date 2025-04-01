@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Menu, X, Bell, User, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useToast } from '@/hooks/use-toast';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,18 +16,22 @@ import {
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const { toast } = useToast();
   
-  // Mock authentication state (would be replaced by actual auth)
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  
-  const handleLogin = () => {
-    navigate('/login');
-  };
+  // We'll consider the user logged in if there's a selectedRole in sessionStorage
+  const isLoggedIn = !!sessionStorage.getItem('selectedRole');
   
   const handleLogout = () => {
-    setIsLoggedIn(false);
-    // Navigate to home page after logout
-    navigate('/');
+    // Clear the selected role from sessionStorage
+    sessionStorage.removeItem('selectedRole');
+    
+    toast({
+      title: "Logged out",
+      description: "You have been successfully logged out",
+    });
+    
+    // Navigate to view selection page after logout
+    navigate('/view-selection');
   };
 
   return (

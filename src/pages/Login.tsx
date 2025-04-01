@@ -1,11 +1,10 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Eye, EyeOff, Mail, Lock } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock, ArrowLeft } from 'lucide-react';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { useForm } from 'react-hook-form';
 import { useToast } from '@/hooks/use-toast';
@@ -28,6 +27,18 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
+  const [role, setRole] = useState<'user' | 'company' | 'admin'>('user');
+  
+  // Get the selected role from sessionStorage on component mount
+  useEffect(() => {
+    const selectedRole = sessionStorage.getItem('selectedRole') as 'user' | 'company' | 'admin' | null;
+    if (selectedRole) {
+      setRole(selectedRole);
+    } else {
+      // If no role is selected, redirect to view selection page
+      navigate('/view-selection');
+    }
+  }, [navigate]);
   
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -42,19 +53,48 @@ const Login = () => {
   };
 
   const onSubmit = (data: LoginFormValues) => {
-    // For now, we'll just show a toast and redirect to the home page
-    // In the future, this would be connected to backend authentication
-    console.log("Login submitted:", data);
+    console.log("Login submitted:", data, "Role:", role);
+    
+    // Show appropriate toast based on the role
     toast({
-      title: "Login successful",
-      description: "Welcome back to Go Fare",
+      title: `${role.charAt(0).toUpperCase() + role.slice(1)} login successful`,
+      description: `Welcome to Go Fare ${role} portal`,
     });
     
-    // Redirect to home page after "login"
+    // Redirect based on the role
     setTimeout(() => {
-      navigate('/');
+      if (role === 'admin') {
+        navigate('/admin/dashboard');
+      } else if (role === 'company') {
+        navigate('/company/dashboard');
+      } else {
+        navigate('/');
+      }
     }, 1000);
   };
+
+  // Role-specific titles and descriptions
+  const getRoleSpecificContent = () => {
+    switch (role) {
+      case 'admin':
+        return {
+          title: "Admin Login",
+          description: "Access the administration portal for Go Fare",
+        };
+      case 'company':
+        return {
+          title: "Company Login",
+          description: "Manage your transportation company on Go Fare",
+        };
+      default:
+        return {
+          title: "User Login",
+          description: "Sign in to access transport fare updates across Enugu",
+        };
+    }
+  };
+
+  const { title, description } = getRoleSpecificContent();
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-white to-gray-100 px-4 py-12">
@@ -68,12 +108,22 @@ const Login = () => {
         
         <Card className="border-none shadow-lg">
           <CardHeader className="space-y-1">
-            <div className="flex items-center justify-center mb-2">
-              <h1 className="text-3xl font-bold text-center text-primary">Go Fare</h1>
+            <div className="flex items-center justify-between mb-2">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => navigate('/view-selection')}
+                className="text-muted-foreground"
+              >
+                <ArrowLeft className="h-4 w-4" />
+                <span className="sr-only">Back to view selection</span>
+              </Button>
+              <h1 className="text-3xl font-bold text-center text-primary flex-1">Go Fare</h1>
+              <div className="w-8"></div> {/* Spacer for alignment */}
             </div>
-            <CardTitle className="text-2xl font-bold text-center">Welcome Back</CardTitle>
+            <CardTitle className="text-2xl font-bold text-center">{title}</CardTitle>
             <CardDescription className="text-center">
-              Sign in to access transport fare updates across Enugu
+              {description}
             </CardDescription>
           </CardHeader>
           <CardContent>

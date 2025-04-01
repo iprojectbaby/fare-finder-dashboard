@@ -1,6 +1,6 @@
 
-import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { 
   Home, 
   LineChart, 
@@ -14,7 +14,8 @@ import {
   ClipboardCheck,
   Building,
   FileWarning,
-  ChartBar
+  ChartBar,
+  LogOut
 } from 'lucide-react';
 import {
   Sidebar,
@@ -29,11 +30,18 @@ import {
   SidebarMenuItem,
   SidebarSeparator,
 } from '@/components/ui/sidebar';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useToast } from '@/hooks/use-toast';
+import { Button } from '@/components/ui/button';
 
 export function AppSidebar() {
   const location = useLocation();
-  const [userRole, setUserRole] = useState<'user' | 'company' | 'admin'>('user');
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  // Get the role from sessionStorage on first load
+  const [userRole, setUserRole] = useState<'user' | 'company' | 'admin'>(() => {
+    const storedRole = sessionStorage.getItem('selectedRole') as 'user' | 'company' | 'admin' | null;
+    return storedRole || 'user';
+  });
   
   // Menu items for regular users
   const userMenuItems = [
@@ -116,6 +124,14 @@ export function AppSidebar() {
     userRole === 'company' ? companyMenuItems : 
     userRole === 'admin' ? adminMenuItems : 
     userMenuItems;
+    
+  const handleLogout = () => {
+    toast({
+      title: "Logged out",
+      description: "You have been successfully logged out",
+    });
+    navigate('/view-selection');
+  };
 
   return (
     <Sidebar>
@@ -126,20 +142,10 @@ export function AppSidebar() {
           </div>
           <div className="font-bold text-lg">Go Fare</div>
         </div>
-        <div className="mt-4">
-          <Select
-            value={userRole}
-            onValueChange={(value: 'user' | 'company' | 'admin') => setUserRole(value)}
-          >
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select role" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="user">User View</SelectItem>
-              <SelectItem value="company">Company View</SelectItem>
-              <SelectItem value="admin">Admin View</SelectItem>
-            </SelectContent>
-          </Select>
+        <div className="mt-2 text-sm text-muted-foreground">
+          {userRole === 'company' ? 'Company Portal' : 
+           userRole === 'admin' ? 'Admin Portal' : 
+           'User Portal'}
         </div>
       </SidebarHeader>
       <SidebarSeparator />
@@ -171,6 +177,14 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter className="p-4">
+        <Button 
+          variant="outline" 
+          className="w-full flex items-center justify-center gap-2 mb-4"
+          onClick={handleLogout}
+        >
+          <LogOut className="h-4 w-4" />
+          <span>Logout</span>
+        </Button>
         <div className="text-xs text-muted-foreground">
           Go Fare v1.0
         </div>

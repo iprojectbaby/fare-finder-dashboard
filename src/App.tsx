@@ -17,6 +17,7 @@ import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import ViewSelection from "./pages/ViewSelection";
 
 // Company pages
 import CompanyDashboard from "./pages/company/Dashboard";
@@ -36,7 +37,7 @@ const queryClient = new QueryClient();
 
 // Check if we're on a login or register page
 const isAuthPage = (pathname: string) => {
-  return pathname === "/login" || pathname === "/register";
+  return pathname === "/login" || pathname === "/register" || pathname === "/view-selection";
 };
 
 // Create a layout component to handle the conditional rendering
@@ -49,6 +50,7 @@ const AppLayout = () => {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/view-selection" element={<ViewSelection />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     );
