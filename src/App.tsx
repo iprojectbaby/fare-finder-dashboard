@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/sidebar";
 import AppSidebar from "@/components/AppSidebar";
 
@@ -31,68 +31,77 @@ import AdminAnalytics from "./pages/admin/Analytics";
 
 const queryClient = new QueryClient();
 
-const App = () => {
-  // Check if we're on a login or register page
-  const isAuthPage = (pathname: string) => {
-    return pathname === "/login" || pathname === "/register";
-  };
+// Check if we're on a login or register page
+const isAuthPage = (pathname: string) => {
+  return pathname === "/login" || pathname === "/register";
+};
 
+// Create a layout component to handle the conditional rendering
+const AppLayout = () => {
+  const location = useLocation();
+  
+  if (isAuthPage(location.pathname)) {
+    // Render authentication pages without sidebar
+    return (
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    );
+  }
+  
+  // Render app pages with sidebar
+  return (
+    <SidebarProvider>
+      <div className="flex min-h-screen w-full">
+        <AppSidebar />
+        <SidebarInset className="flex-1">
+          <div className="p-4">
+            <div className="mb-4 flex items-center justify-between">
+              <div className="flex items-center">
+                <SidebarTrigger className="mr-2" />
+                <h1 className="text-2xl font-bold">Go Fare</h1>
+              </div>
+            </div>
+            <Routes>
+              {/* User Routes */}
+              <Route path="/" element={<Index />} />
+              <Route path="/compare" element={<Compare />} />
+              <Route path="/report" element={<Report />} />
+              <Route path="/settings" element={<Settings />} />
+              
+              {/* Company Routes */}
+              <Route path="/company/dashboard" element={<CompanyDashboard />} />
+              <Route path="/company/manage-fares" element={<ManageFares />} />
+              <Route path="/company/price-history" element={<PriceHistory />} />
+              <Route path="/company/analytics" element={<CompanyAnalytics />} />
+              
+              {/* Admin Routes */}
+              <Route path="/admin/dashboard" element={<AdminDashboard />} />
+              <Route path="/admin/manage-fares" element={<AdminManageFares />} />
+              <Route path="/admin/company-management" element={<CompanyManagement />} />
+              <Route path="/admin/user-reports" element={<UserReports />} />
+              <Route path="/admin/analytics" element={<AdminAnalytics />} />
+              
+              {/* 404 Route */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </div>
+        </SidebarInset>
+      </div>
+    </SidebarProvider>
+  );
+};
+
+const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Toaster />
         <Sonner />
         <BrowserRouter>
-          {({ location }) => (
-            isAuthPage(location.pathname) ? (
-              // Render authentication pages without sidebar
-              <Routes>
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            ) : (
-              // Render app pages with sidebar
-              <SidebarProvider>
-                <div className="flex min-h-screen w-full">
-                  <AppSidebar />
-                  <SidebarInset className="flex-1">
-                    <div className="p-4">
-                      <div className="mb-4 flex items-center justify-between">
-                        <div className="flex items-center">
-                          <SidebarTrigger className="mr-2" />
-                          <h1 className="text-2xl font-bold">Go Fare</h1>
-                        </div>
-                      </div>
-                      <Routes>
-                        {/* User Routes */}
-                        <Route path="/" element={<Index />} />
-                        <Route path="/compare" element={<Compare />} />
-                        <Route path="/report" element={<Report />} />
-                        <Route path="/settings" element={<Settings />} />
-                        
-                        {/* Company Routes */}
-                        <Route path="/company/dashboard" element={<CompanyDashboard />} />
-                        <Route path="/company/manage-fares" element={<ManageFares />} />
-                        <Route path="/company/price-history" element={<PriceHistory />} />
-                        <Route path="/company/analytics" element={<CompanyAnalytics />} />
-                        
-                        {/* Admin Routes */}
-                        <Route path="/admin/dashboard" element={<AdminDashboard />} />
-                        <Route path="/admin/manage-fares" element={<AdminManageFares />} />
-                        <Route path="/admin/company-management" element={<CompanyManagement />} />
-                        <Route path="/admin/user-reports" element={<UserReports />} />
-                        <Route path="/admin/analytics" element={<AdminAnalytics />} />
-                        
-                        {/* 404 Route */}
-                        <Route path="*" element={<NotFound />} />
-                      </Routes>
-                    </div>
-                  </SidebarInset>
-                </div>
-              </SidebarProvider>
-            )
-          )}
+          <AppLayout />
         </BrowserRouter>
       </TooltipProvider>
     </QueryClientProvider>
