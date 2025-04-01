@@ -20,9 +20,9 @@ const ViewSelection = () => {
       <div className="w-full max-w-4xl">
         {/* Nigeria flag colors as accent bars */}
         <div className="flex mb-6">
-          <div className="w-1/3 h-2 bg-[#008751]"></div>
+          <div className="w-1/3 h-2 bg-[#008751] hidden"></div>
           <div className="w-1/3 h-2 bg-white"></div>
-          <div className="w-1/3 h-2 bg-[#008751]"></div>
+          <div className="w-1/3 h-2 bg-[#008751] hidden"></div>
         </div>
         
         <Card className="border-none shadow-lg">
@@ -54,7 +54,7 @@ const ViewSelection = () => {
                   </p>
                 </CardContent>
                 <CardFooter>
-                  <Button className="w-full bg-[#008751] hover:bg-[#006b40]" onClick={() => handleViewSelection('user')}>
+                  <Button className="w-full" onClick={() => handleViewSelection('user')}>
                     Continue as User
                   </Button>
                 </CardFooter>
@@ -76,7 +76,7 @@ const ViewSelection = () => {
                   </p>
                 </CardContent>
                 <CardFooter>
-                  <Button className="w-full bg-[#008751] hover:bg-[#006b40]" onClick={() => handleViewSelection('company')}>
+                  <Button className="w-full" onClick={() => handleViewSelection('company')}>
                     Continue as Company
                   </Button>
                 </CardFooter>
@@ -98,7 +98,7 @@ const ViewSelection = () => {
                   </p>
                 </CardContent>
                 <CardFooter>
-                  <Button className="w-full bg-[#008751] hover:bg-[#006b40]" onClick={() => handleViewSelection('admin')}>
+                  <Button className="w-full" onClick={() => handleViewSelection('admin')}>
                     Continue as Admin
                   </Button>
                 </CardFooter>
@@ -113,11 +113,11 @@ const ViewSelection = () => {
           </CardFooter>
         </Card>
         
-        {/* Nigeria flag colors as accent bars */}
+        {/* Nigeria flag colors as accent bars - hidden */}
         <div className="flex mt-6">
-          <div className="w-1/3 h-2 bg-[#008751]"></div>
+          <div className="w-1/3 h-2 bg-[#008751] hidden"></div>
           <div className="w-1/3 h-2 bg-white"></div>
-          <div className="w-1/3 h-2 bg-[#008751]"></div>
+          <div className="w-1/3 h-2 bg-[#008751] hidden"></div>
         </div>
       </div>
     </div>

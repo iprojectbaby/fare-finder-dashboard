@@ -84,8 +84,9 @@ const Settings = () => {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="English">English</SelectItem>
-                  <SelectItem value="Spanish">Spanish</SelectItem>
-                  <SelectItem value="French">French</SelectItem>
+                  <SelectItem value="Igbo">Igbo</SelectItem>
+                  <SelectItem value="Yoruba">Yoruba</SelectItem>
+                  <SelectItem value="Hausa">Hausa</SelectItem>
                 </SelectContent>
               </Select>
             </div>

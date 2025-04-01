@@ -17,153 +17,155 @@ export interface FareData {
 }
 
 export const popularDestinations = [
-  { name: "New York", code: "NYC" },
-  { name: "Los Angeles", code: "LAX" },
-  { name: "Chicago", code: "CHI" },
-  { name: "Miami", code: "MIA" },
-  { name: "San Francisco", code: "SFO" },
-  { name: "Boston", code: "BOS" },
-  { name: "Dallas", code: "DAL" },
-  { name: "Seattle", code: "SEA" }
+  { name: "Enugu", code: "ENU" },
+  { name: "Nsukka", code: "NSK" },
+  { name: "Awgu", code: "AWG" },
+  { name: "Udi", code: "UDI" },
+  { name: "Oji River", code: "OJR" },
+  { name: "Ezeagu", code: "EZA" },
+  { name: "Nkanu", code: "NKA" },
+  { name: "Abakaliki", code: "ABK" },
+  { name: "Onitsha", code: "ONI" },
+  { name: "Owerri", code: "OWE" }
 ];
 
 export const transportCompanies = [
-  { name: "Blue Transit", id: "blue-transit" },
-  { name: "Express Lines", id: "express-lines" },
-  { name: "Metro Connect", id: "metro-connect" },
-  { name: "Coastal Ferries", id: "coastal-ferries" },
-  { name: "Sky Routes", id: "sky-routes" },
-  { name: "City Rail", id: "city-rail" }
+  { name: "Peace Mass Transit", id: "peace-mass" },
+  { name: "GUO Transport", id: "guo-transport" },
+  { name: "ABC Transport", id: "abc-transport" },
+  { name: "God is Good Motors", id: "gigm" },
+  { name: "Enugu City Transport", id: "enugu-city" },
+  { name: "Ifesinachi Transport", id: "ifesinachi" }
 ];
 
 export const fakeHistoricalPrices = {
-  "NYC-LAX": [42, 45, 48, 43, 41, 44, 49],
-  "MIA-NYC": [38, 35, 39, 42, 40, 38, 37],
-  "CHI-BOS": [29, 31, 28, 30, 33, 35, 32],
-  "LAX-SFO": [25, 28, 26, 24, 25, 27, 29]
+  "ENU-NSK": [1200, 1300, 1400, 1250, 1350, 1450, 1500],
+  "ENU-OWE": [2500, 2400, 2600, 2700, 2550, 2450, 2600],
+  "ENU-ONI": [1800, 1900, 1750, 1850, 2000, 1950, 1900],
+  "ENU-ABK": [1000, 1100, 1050, 1150, 1200, 1100, 1150]
 };
 
 export const transportFares: FareData[] = [
   {
     id: "1",
-    company: "Blue Transit",
+    company: "Peace Mass Transit",
     route: {
-      from: "New York",
-      to: "Boston"
+      from: "Enugu",
+      to: "Nsukka"
     },
-    price: 45.99,
-    duration: "4h 15m",
+    price: 1500,
+    duration: "1h 30m",
     departureTime: "08:30 AM",
     transportType: "bus",
     logo: "https://via.placeholder.com/50",
     rating: 4.2,
-    amenities: ["WiFi", "Power Outlets", "Restroom"]
+    amenities: ["Air Conditioning", "Comfortable Seats", "Storage Space"]
   },
   {
     id: "2",
-    company: "Express Lines",
+    company: "GUO Transport",
     route: {
-      from: "New York",
-      to: "Boston"
+      from: "Enugu",
+      to: "Nsukka"
     },
-    price: 42.50,
+    price: 1300,
     discount: 10,
-    duration: "4h 30m",
+    duration: "1h 45m",
     departureTime: "09:15 AM",
     transportType: "bus",
     logo: "https://via.placeholder.com/50",
     rating: 4.0,
-    amenities: ["WiFi", "Power Outlets", "Snacks", "Restroom"]
+    amenities: ["Air Conditioning", "Comfortable Seats", "Free Water", "Storage Space"]
   },
   {
     id: "3",
-    company: "Metro Connect",
+    company: "ABC Transport",
     route: {
-      from: "New York",
-      to: "Boston"
+      from: "Enugu",
+      to: "Owerri"
     },
-    price: 52.75,
-    duration: "3h 45m",
+    price: 2600,
+    duration: "2h 45m",
     departureTime: "10:00 AM",
-    transportType: "train",
+    transportType: "bus",
     logo: "https://via.placeholder.com/50",
     rating: 4.5,
-    amenities: ["WiFi", "Cafe Car", "Extra Legroom"]
+    amenities: ["Air Conditioning", "Refreshments", "Extra Legroom"]
   },
   {
     id: "4",
-    company: "City Rail",
+    company: "God is Good Motors",
     route: {
-      from: "New York",
-      to: "Boston"
+      from: "Enugu",
+      to: "Onitsha"
     },
-    price: 48.25,
-    duration: "3h 50m",
+    price: 1900,
+    duration: "2h 00m",
     departureTime: "11:30 AM",
-    transportType: "train",
+    transportType: "bus",
     logo: "https://via.placeholder.com/50",
     rating: 4.3,
-    amenities: ["WiFi", "Power Outlets", "Quiet Car"]
+    amenities: ["Air Conditioning", "Comfortable Seats", "Power Outlets"]
   },
   {
     id: "5",
-    company: "Coastal Ferries",
+    company: "Enugu City Transport",
     route: {
-      from: "Miami",
-      to: "Key West"
+      from: "Enugu",
+      to: "Awgu"
     },
-    price: 65.00,
-    duration: "3h 30m",
+    price: 800,
+    duration: "1h 10m",
     departureTime: "09:00 AM",
-    transportType: "ferry",
+    transportType: "bus",
     logo: "https://via.placeholder.com/50",
-    rating: 4.7,
-    amenities: ["Open Deck", "Cafe", "Scenic Views"]
+    rating: 3.7,
+    amenities: ["Basic Seating", "Storage Space"]
   },
   {
     id: "6",
-    company: "Sky Routes",
+    company: "Ifesinachi Transport",
     route: {
-      from: "Los Angeles",
-      to: "San Francisco"
+      from: "Enugu",
+      to: "Abakaliki"
     },
-    price: 119.99,
+    price: 1150,
     discount: 15,
     duration: "1h 30m",
     departureTime: "07:45 AM",
-    transportType: "flight",
+    transportType: "bus",
     logo: "https://via.placeholder.com/50",
     rating: 4.1,
-    amenities: ["In-flight Entertainment", "Meal Service", "Extra Baggage"]
+    amenities: ["Air Conditioning", "Refreshments", "Extra Baggage"]
   },
   {
     id: "7",
-    company: "Blue Transit",
+    company: "Peace Mass Transit",
     route: {
-      from: "Chicago",
-      to: "Detroit"
+      from: "Enugu",
+      to: "Udi"
     },
-    price: 38.50,
-    duration: "5h 15m",
+    price: 600,
+    duration: "45m",
     departureTime: "08:00 AM",
     transportType: "bus",
     logo: "https://via.placeholder.com/50",
     rating: 3.9,
-    amenities: ["WiFi", "Power Outlets", "Restroom"]
+    amenities: ["Basic Seating", "Storage Space"]
   },
   {
     id: "8",
-    company: "Express Lines",
+    company: "GUO Transport",
     route: {
-      from: "Seattle",
-      to: "Portland"
+      from: "Enugu",
+      to: "Oji River"
     },
-    price: 35.75,
-    duration: "3h 00m",
+    price: 750,
+    duration: "1h 00m",
     departureTime: "10:30 AM",
     transportType: "bus",
     logo: "https://via.placeholder.com/50",
     rating: 4.4,
-    amenities: ["WiFi", "Power Outlets", "Restroom", "Extra Legroom"]
+    amenities: ["Air Conditioning", "Comfortable Seats", "Storage Space"]
   }
 ];
