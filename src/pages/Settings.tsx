@@ -10,7 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 const Settings = () => {
   const [notifications, setNotifications] = useState(true);
   const [emailUpdates, setEmailUpdates] = useState(false);
-  const [currency, setCurrency] = useState('USD');
+  const [currency, setCurrency] = useState('NGN');
   const [language, setLanguage] = useState('English');
   const { toast } = useToast();
 
@@ -68,6 +68,7 @@ const Settings = () => {
                   <SelectValue placeholder="Select currency" />
                 </SelectTrigger>
                 <SelectContent>
+                  <SelectItem value="NGN">NGN (₦)</SelectItem>
                   <SelectItem value="USD">USD ($)</SelectItem>
                   <SelectItem value="EUR">EUR (€)</SelectItem>
                   <SelectItem value="GBP">GBP (£)</SelectItem>

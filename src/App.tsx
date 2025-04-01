@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/sidebar";
 import AppSidebar from "@/components/AppSidebar";
+import Navbar from "@/components/Navbar";
 
 // User pages
 import Index from "./pages/Index";
@@ -63,6 +64,7 @@ const AppLayout = () => {
                 <SidebarTrigger className="mr-2" />
                 <h1 className="text-2xl font-bold">Go Fare</h1>
               </div>
+              <Navbar />
             </div>
             <Routes>
               {/* User Routes */}

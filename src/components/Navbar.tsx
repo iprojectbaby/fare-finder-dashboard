@@ -30,95 +30,86 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <nav className="fixed top-0 w-full z-50 bg-white dark:bg-gray-900 shadow-sm">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
-          <div className="flex">
-            <div className="flex-shrink-0 flex items-center">
-              <Link to="/">
-                <span className="text-primary font-bold text-xl">Go Fare</span>
-              </Link>
-            </div>
-            <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
-              <Link
-                to="/"
-                className="border-primary text-gray-900 dark:text-gray-100 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
-              >
-                Home
-              </Link>
-              <Link
-                to="/compare"
-                className="border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
-              >
-                Compare
-              </Link>
-              <Link
-                to="/report"
-                className="border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
-              >
-                Report
-              </Link>
-              <Link
-                to="/settings"
-                className="border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
-              >
-                Settings
-              </Link>
-            </div>
-          </div>
-          <div className="hidden sm:ml-6 sm:flex sm:items-center">
-            {isLoggedIn ? (
-              <>
-                <Button variant="ghost" size="icon" className="relative">
-                  <Bell className="h-5 w-5" />
-                  <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-accent"></span>
-                </Button>
-                <div className="ml-3 relative">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="icon" className="rounded-full">
-                        <User className="h-5 w-5" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem>
-                        <Link to="/settings" className="w-full">Profile</Link>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem>
-                        <Link to="/settings" className="w-full">Settings</Link>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem>Saved Routes</DropdownMenuItem>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem onClick={handleLogout}>
-                        <LogOut className="mr-2 h-4 w-4" />
-                        Sign out
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </div>
-              </>
-            ) : (
-              <div className="flex space-x-4">
-                <Button variant="outline" onClick={() => navigate('/login')}>
-                  Sign In
-                </Button>
-                <Button variant="default" onClick={() => navigate('/register')}>
-                  Sign Up
-                </Button>
+    <nav className="w-full z-40 bg-white dark:bg-gray-900">
+      <div className="flex justify-between">
+        <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
+          <Link
+            to="/"
+            className="border-primary text-gray-900 dark:text-gray-100 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+          >
+            Home
+          </Link>
+          <Link
+            to="/compare"
+            className="border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+          >
+            Compare
+          </Link>
+          <Link
+            to="/report"
+            className="border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+          >
+            Report
+          </Link>
+          <Link
+            to="/settings"
+            className="border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+          >
+            Settings
+          </Link>
+        </div>
+        <div className="sm:ml-6 sm:flex sm:items-center">
+          {isLoggedIn ? (
+            <>
+              <Button variant="ghost" size="icon" className="relative">
+                <Bell className="h-5 w-5" />
+                <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-accent"></span>
+              </Button>
+              <div className="ml-3 relative">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="icon" className="rounded-full">
+                      <User className="h-5 w-5" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem>
+                      <Link to="/settings" className="w-full">Profile</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <Link to="/settings" className="w-full">Settings</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>Saved Routes</DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={handleLogout}>
+                      <LogOut className="mr-2 h-4 w-4" />
+                      Sign out
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
-            )}
-          </div>
-          <div className="-mr-2 flex items-center sm:hidden">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-            >
-              {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-            </Button>
-          </div>
+            </>
+          ) : (
+            <div className="flex space-x-4">
+              <Button variant="outline" onClick={() => navigate('/login')}>
+                Sign In
+              </Button>
+              <Button variant="default" onClick={() => navigate('/register')}>
+                Sign Up
+              </Button>
+            </div>
+          )}
+        </div>
+        <div className="flex items-center sm:hidden">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          >
+            {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </Button>
         </div>
       </div>
 
