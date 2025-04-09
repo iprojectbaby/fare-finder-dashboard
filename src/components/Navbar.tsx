@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Menu, X, Bell, User, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -20,6 +20,7 @@ const Navbar: React.FC = () => {
   
   // We'll consider the user logged in if there's a selectedRole in sessionStorage
   const isLoggedIn = !!sessionStorage.getItem('selectedRole');
+  const userRole = sessionStorage.getItem('selectedRole') as 'user' | 'company' | 'admin' | null;
   
   const handleLogout = () => {
     // Clear the selected role from sessionStorage
@@ -34,34 +35,49 @@ const Navbar: React.FC = () => {
     navigate('/view-selection');
   };
 
+  // Define navigation links based on user role
+  const getNavLinks = () => {
+    switch (userRole) {
+      case 'admin':
+        return [
+          { name: 'Dashboard', path: '/admin/dashboard' },
+          { name: 'Manage Fares', path: '/admin/manage-fares' },
+          { name: 'Companies', path: '/admin/company-management' },
+          { name: 'User Reports', path: '/admin/user-reports' },
+          { name: 'Analytics', path: '/admin/analytics' }
+        ];
+      case 'company':
+        return [
+          { name: 'Dashboard', path: '/company/dashboard' },
+          { name: 'Manage Fares', path: '/company/manage-fares' },
+          { name: 'Price History', path: '/company/price-history' },
+          { name: 'Analytics', path: '/company/analytics' }
+        ];
+      default: // User role
+        return [
+          { name: 'Home', path: '/' },
+          { name: 'Compare', path: '/compare' },
+          { name: 'Report', path: '/report' },
+          { name: 'Settings', path: '/settings' }
+        ];
+    }
+  };
+
+  const navLinks = getNavLinks();
+
   return (
     <nav className="w-full z-40 bg-white dark:bg-gray-900">
       <div className="flex justify-between">
         <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
-          <Link
-            to="/"
-            className="border-primary text-gray-900 dark:text-gray-100 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
-          >
-            Home
-          </Link>
-          <Link
-            to="/compare"
-            className="border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
-          >
-            Compare
-          </Link>
-          <Link
-            to="/report"
-            className="border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
-          >
-            Report
-          </Link>
-          <Link
-            to="/settings"
-            className="border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
-          >
-            Settings
-          </Link>
+          {navLinks.map((link) => (
+            <Link
+              key={link.path}
+              to={link.path}
+              className="border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+            >
+              {link.name}
+            </Link>
+          ))}
         </div>
         <div className="sm:ml-6 sm:flex sm:items-center">
           {isLoggedIn ? (
@@ -81,10 +97,14 @@ const Navbar: React.FC = () => {
                     <DropdownMenuLabel>My Account</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem>
-                      <Link to="/settings" className="w-full">Profile</Link>
+                      <Link to={userRole === 'admin' ? '/admin/dashboard' : 
+                               userRole === 'company' ? '/company/dashboard' : 
+                               '/settings'} className="w-full">Profile</Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
-                      <Link to="/settings" className="w-full">Settings</Link>
+                      <Link to={userRole === 'admin' ? '/admin/dashboard' : 
+                               userRole === 'company' ? '/company/dashboard' : 
+                               '/settings'} className="w-full">Settings</Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem>Saved Routes</DropdownMenuItem>
                     <DropdownMenuSeparator />
@@ -121,34 +141,16 @@ const Navbar: React.FC = () => {
       {isMenuOpen && (
         <div className="sm:hidden">
           <div className="pt-2 pb-3 space-y-1">
-            <Link
-              to="/"
-              className="bg-primary-50 border-primary text-primary-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Home
-            </Link>
-            <Link
-              to="/compare"
-              className="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Compare
-            </Link>
-            <Link
-              to="/report"
-              className="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Report
-            </Link>
-            <Link
-              to="/settings"
-              className="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Settings
-            </Link>
+            {navLinks.map((link) => (
+              <Link
+                key={link.path}
+                to={link.path}
+                className="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {link.name}
+              </Link>
+            ))}
           </div>
           
           {!isLoggedIn && (
@@ -194,14 +196,18 @@ const Navbar: React.FC = () => {
               </div>
               <div className="mt-3 space-y-1">
                 <Link
-                  to="/settings"
+                  to={userRole === 'admin' ? '/admin/dashboard' : 
+                      userRole === 'company' ? '/company/dashboard' : 
+                      '/settings'}
                   className="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Your Profile
                 </Link>
                 <Link
-                  to="/settings"
+                  to={userRole === 'admin' ? '/admin/dashboard' : 
+                      userRole === 'company' ? '/company/dashboard' : 
+                      '/settings'}
                   className="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100"
                   onClick={() => setIsMenuOpen(false)}
                 >
