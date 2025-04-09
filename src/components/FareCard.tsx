@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Star, Clock, AlertCircle, Truck, ShieldCheck, ThumbsUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -135,7 +136,7 @@ const FareCard: React.FC<FareCardProps> = ({ fare, onReportIssue, onBookNow, onV
               <div className="flex items-center space-x-2">
                 <h3 className="text-lg font-semibold">{fare.company}</h3>
                 {fare.verified && (
-                  <ShieldCheck className="h-4 w-4 text-primary" title="Verified Company" />
+                  <ShieldCheck className="h-4 w-4 text-primary" aria-label="Verified Company" />
                 )}
                 {fare.featured && (
                   <Badge variant="outline" className="bg-accent/20 text-accent-foreground">

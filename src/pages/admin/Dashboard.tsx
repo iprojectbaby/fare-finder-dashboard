@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -7,90 +8,7 @@ import { BarChart, LineChart, PieChart, Users, ShieldCheck, Star, MessageSquare,
 import { ChartContainer } from "@/components/ui/chart";
 import { ResponsiveContainer, LineChart as RechartsLineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, BarChart as RechartsBarChart, Bar } from 'recharts';
 import { Link } from 'react-router-dom';
-
-interface TabsProps {
-  defaultValue: string;
-  children: React.ReactNode;
-}
-
-interface TabsListProps {
-  children: React.ReactNode;
-  className?: string;
-  activeTab: string;
-  setActiveTab: (value: string) => void;
-}
-
-interface TabsTriggerProps {
-  value: string;
-  children: React.ReactNode;
-  activeTab: string;
-  setActiveTab: (value: string) => void;
-}
-
-interface TabsContentProps {
-  value: string;
-  children: React.ReactNode;
-  activeTab: string;
-}
-
-const Tabs: React.FC<TabsProps> = ({ defaultValue, children }) => {
-  const [activeTab, setActiveTab] = React.useState(defaultValue);
-
-  return (
-    <div className="tabs">
-      {React.Children.map(children, (child) => {
-        if (React.isValidElement(child) && child.type === TabsList) {
-          return React.cloneElement(child as React.ReactElement<any>, { activeTab, setActiveTab });
-        }
-        if (React.isValidElement(child) && child.type === TabsContent) {
-          return React.cloneElement(child as React.ReactElement<any>, { activeTab });
-        }
-        return child;
-      })}
-    </div>
-  );
-};
-
-const TabsList: React.FC<TabsListProps> = ({ children, activeTab, setActiveTab, className }) => {
-  return (
-    <div className={`flex rounded-md border mb-4 ${className || ''}`}>
-      {React.Children.map(children, (child) => {
-        if (React.isValidElement(child) && child.type === TabsTrigger) {
-          return React.cloneElement(child as React.ReactElement<any>, { 
-            activeTab, 
-            setActiveTab 
-          });
-        }
-        return child;
-      })}
-    </div>
-  );
-};
-
-const TabsTrigger: React.FC<TabsTriggerProps> = ({ 
-  value, 
-  children, 
-  activeTab, 
-  setActiveTab 
-}) => {
-  return (
-    <button 
-      className={`flex-1 px-3 py-2 text-sm font-medium text-center rounded-md ${
-        activeTab === value 
-          ? 'bg-primary text-white' 
-          : 'hover:bg-muted'
-      }`}
-      onClick={() => setActiveTab(value)}
-    >
-      {children}
-    </button>
-  );
-};
-
-const TabsContent: React.FC<TabsContentProps> = ({ value, children, activeTab }) => {
-  if (value !== activeTab) return null;
-  return <div>{children}</div>;
-};
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
 const AdminDashboard = () => {
   // Mock data for the dashboard
