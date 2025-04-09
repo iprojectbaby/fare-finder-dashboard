@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Star, Clock, AlertCircle, Truck, ShieldCheck, ThumbsUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -9,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription, DrawerFooter, DrawerTrigger } from '@/components/ui/drawer';
-import { useMobile } from '@/hooks/use-mobile';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface FareCardProps {
   fare: FareData;
@@ -27,7 +26,7 @@ const transportIcons: Record<string, React.ReactElement> = {
 
 const FareCard: React.FC<FareCardProps> = ({ fare, onReportIssue, onBookNow, onViewReviews }) => {
   const { toast } = useToast();
-  const isMobile = useMobile();
+  const isMobile = useIsMobile();
   const [bookingInfo, setBookingInfo] = useState({
     name: '',
     email: '',
