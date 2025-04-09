@@ -1,4 +1,3 @@
-
 export interface FareData {
   id: string;
   company: string;
@@ -14,6 +13,44 @@ export interface FareData {
   logo: string;
   rating: number;
   amenities: string[];
+  verified?: boolean;
+  featured?: boolean;
+}
+
+export interface Review {
+  id: string;
+  fareId: string;
+  companyId: string;
+  userId: string;
+  userName: string;
+  rating: number;
+  comment: string;
+  date: string;
+  status: 'pending' | 'approved' | 'rejected';
+}
+
+export interface Booking {
+  id: string;
+  fareId: string;
+  userId: string;
+  userName: string;
+  userEmail?: string;
+  userPhone?: string;
+  seats: number;
+  status: 'pending' | 'confirmed' | 'cancelled' | 'completed';
+  bookingDate: string;
+  travelDate: string;
+}
+
+export interface PromotionRequest {
+  id: string;
+  companyId: string;
+  companyName: string;
+  requestDate: string;
+  startDate: string;
+  endDate: string;
+  status: 'pending' | 'approved' | 'rejected';
+  type: 'featured' | 'discount' | 'banner';
 }
 
 export const popularDestinations = [
@@ -30,12 +67,12 @@ export const popularDestinations = [
 ];
 
 export const transportCompanies = [
-  { name: "Peace Mass Transit", id: "peace-mass" },
-  { name: "GUO Transport", id: "guo-transport" },
-  { name: "ABC Transport", id: "abc-transport" },
-  { name: "God is Good Motors", id: "gigm" },
-  { name: "Enugu City Transport", id: "enugu-city" },
-  { name: "Ifesinachi Transport", id: "ifesinachi" }
+  { name: "Peace Mass Transit", id: "peace-mass", verified: true },
+  { name: "GUO Transport", id: "guo-transport", verified: true },
+  { name: "ABC Transport", id: "abc-transport", verified: false },
+  { name: "God is Good Motors", id: "gigm", verified: true },
+  { name: "Enugu City Transport", id: "enugu-city", verified: false },
+  { name: "Ifesinachi Transport", id: "ifesinachi", verified: false }
 ];
 
 export const fakeHistoricalPrices = {
@@ -59,7 +96,9 @@ export const transportFares: FareData[] = [
     transportType: "bus",
     logo: "https://via.placeholder.com/50",
     rating: 4.2,
-    amenities: ["Air Conditioning", "Comfortable Seats", "Storage Space"]
+    amenities: ["Air Conditioning", "Comfortable Seats", "Storage Space"],
+    verified: true,
+    featured: true
   },
   {
     id: "2",
@@ -75,7 +114,8 @@ export const transportFares: FareData[] = [
     transportType: "bus",
     logo: "https://via.placeholder.com/50",
     rating: 4.0,
-    amenities: ["Air Conditioning", "Comfortable Seats", "Free Water", "Storage Space"]
+    amenities: ["Air Conditioning", "Comfortable Seats", "Free Water", "Storage Space"],
+    verified: true
   },
   {
     id: "3",
@@ -167,5 +207,132 @@ export const transportFares: FareData[] = [
     logo: "https://via.placeholder.com/50",
     rating: 4.4,
     amenities: ["Air Conditioning", "Comfortable Seats", "Storage Space"]
+  }
+];
+
+export const fakeReviews: Review[] = [
+  {
+    id: "1",
+    fareId: "1",
+    companyId: "peace-mass",
+    userId: "user1",
+    userName: "John Doe",
+    rating: 4,
+    comment: "Very comfortable journey, the driver was professional and punctual.",
+    date: "2023-11-15",
+    status: "approved"
+  },
+  {
+    id: "2",
+    fareId: "1",
+    companyId: "peace-mass",
+    userId: "user2",
+    userName: "Mary Johnson",
+    rating: 5,
+    comment: "Excellent service, very clean bus and on-time departure.",
+    date: "2023-11-10",
+    status: "approved"
+  },
+  {
+    id: "3",
+    fareId: "2",
+    companyId: "guo-transport",
+    userId: "user3",
+    userName: "David Williams",
+    rating: 3,
+    comment: "Average experience, bus was slightly delayed but comfortable ride.",
+    date: "2023-11-05",
+    status: "approved"
+  },
+  {
+    id: "4",
+    fareId: "3",
+    companyId: "abc-transport",
+    userId: "user4",
+    userName: "Sarah Brown",
+    rating: 4,
+    comment: "Good service, would use again.",
+    date: "2023-11-01",
+    status: "approved"
+  },
+  {
+    id: "5",
+    fareId: "4",
+    companyId: "gigm",
+    userId: "user5",
+    userName: "Michael Smith",
+    rating: 2,
+    comment: "Bus was late and air conditioning wasn't working properly.",
+    date: "2023-10-28",
+    status: "pending"
+  }
+];
+
+export const fakeBookings: Booking[] = [
+  {
+    id: "1",
+    fareId: "1",
+    userId: "user1",
+    userName: "John Doe",
+    userPhone: "08012345678",
+    seats: 1,
+    status: "confirmed",
+    bookingDate: "2023-11-12",
+    travelDate: "2023-11-20"
+  },
+  {
+    id: "2",
+    fareId: "2",
+    userId: "user2",
+    userName: "Mary Johnson",
+    userEmail: "mary@example.com",
+    seats: 2,
+    status: "pending",
+    bookingDate: "2023-11-15",
+    travelDate: "2023-11-22"
+  },
+  {
+    id: "3",
+    fareId: "3",
+    userId: "user3",
+    userName: "David Williams",
+    userPhone: "08087654321",
+    seats: 1,
+    status: "completed",
+    bookingDate: "2023-10-25",
+    travelDate: "2023-11-01"
+  }
+];
+
+export const fakePromotionRequests: PromotionRequest[] = [
+  {
+    id: "1",
+    companyId: "peace-mass",
+    companyName: "Peace Mass Transit",
+    requestDate: "2023-11-10",
+    startDate: "2023-11-15",
+    endDate: "2023-12-15",
+    status: "approved",
+    type: "featured"
+  },
+  {
+    id: "2",
+    companyId: "guo-transport",
+    companyName: "GUO Transport",
+    requestDate: "2023-11-12",
+    startDate: "2023-11-20",
+    endDate: "2023-12-20",
+    status: "pending",
+    type: "featured"
+  },
+  {
+    id: "3",
+    companyId: "abc-transport",
+    companyName: "ABC Transport",
+    requestDate: "2023-11-05",
+    startDate: "2023-11-25",
+    endDate: "2023-12-25",
+    status: "pending",
+    type: "discount"
   }
 ];

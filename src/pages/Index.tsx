@@ -6,9 +6,11 @@ import FareCard from '@/components/FareCard';
 import ComparisonChart from '@/components/ComparisonChart';
 import MobileFilters from '@/components/MobileFilters';
 import ReportModal from '@/components/ReportModal';
-import { transportFares, fakeHistoricalPrices, FareData } from '@/data/fakeData';
+import ReviewDialog from '@/components/ReviewDialog';
+import { transportFares, fakeHistoricalPrices, FareData, fakeReviews } from '@/data/fakeData';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
+import { transportCompanies } from '@/data/fakeData';
 
 const Index = () => {
   const [fares, setFares] = useState<FareData[]>([]);
@@ -17,6 +19,8 @@ const Index = () => {
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
   const [reportFareId, setReportFareId] = useState<string | null>(null);
   const [showReportModal, setShowReportModal] = useState(false);
+  const [showReviewDialog, setShowReviewDialog] = useState(false);
+  const [selectedFare, setSelectedFare] = useState<FareData | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -142,6 +146,11 @@ const Index = () => {
           }
         );
       }
+
+      // Filter by verification status
+      if (filters.verifiedOnly) {
+        filteredFares = filteredFares.filter(fare => fare.verified);
+      }
       
       setFares(filteredFares);
       setIsLoading(false);
@@ -156,6 +165,23 @@ const Index = () => {
   const closeReportModal = () => {
     setShowReportModal(false);
     setReportFareId(null);
+  };
+
+  const handleViewReviews = (fareId: string) => {
+    const fare = fares.find(f => f.id === fareId);
+    if (fare) {
+      setSelectedFare(fare);
+      setShowReviewDialog(true);
+    }
+  };
+
+  const getCompanyIdFromName = (name: string) => {
+    const company = transportCompanies.find(c => c.name === name);
+    return company ? company.id : '';
+  };
+
+  const getFareReviews = (fareId: string) => {
+    return fakeReviews.filter(review => review.fareId === fareId);
   };
 
   return (
@@ -243,7 +269,8 @@ const Index = () => {
                   <FareCard 
                     key={fare.id} 
                     fare={fare} 
-                    onReportIssue={handleReportIssue} 
+                    onReportIssue={handleReportIssue}
+                    onViewReviews={() => handleViewReviews(fare.id)} 
                   />
                 ))}
               </div>
@@ -274,20 +301,20 @@ const Index = () => {
             <h3 className="text-lg font-semibold mb-4">Travel Tips</h3>
             <ul className="space-y-3 text-sm">
               <li className="flex items-start">
-                <span className="bg-blue-100 text-primary p-1 rounded mr-2 mt-0.5">•</span>
+                <span className="bg-primary/10 text-primary p-1 rounded mr-2 mt-0.5">•</span>
                 <span>Book midweek for the best prices on most routes</span>
               </li>
               <li className="flex items-start">
-                <span className="bg-blue-100 text-primary p-1 rounded mr-2 mt-0.5">•</span>
+                <span className="bg-primary/10 text-primary p-1 rounded mr-2 mt-0.5">•</span>
                 <span>Compare different transport types for the same route</span>
               </li>
               <li className="flex items-start">
-                <span className="bg-blue-100 text-primary p-1 rounded mr-2 mt-0.5">•</span>
+                <span className="bg-primary/10 text-primary p-1 rounded mr-2 mt-0.5">•</span>
                 <span>Check for seasonal promotions and discounts</span>
               </li>
               <li className="flex items-start">
-                <span className="bg-blue-100 text-primary p-1 rounded mr-2 mt-0.5">•</span>
-                <span>Some companies offer loyalty programs with significant savings</span>
+                <span className="bg-primary/10 text-primary p-1 rounded mr-2 mt-0.5">•</span>
+                <span>Look for verified companies for reliable service</span>
               </li>
             </ul>
           </div>
@@ -300,6 +327,18 @@ const Index = () => {
         fareId={reportFareId} 
         onClose={closeReportModal} 
       />
+
+      {/* Review Dialog */}
+      {selectedFare && (
+        <ReviewDialog
+          isOpen={showReviewDialog}
+          onClose={() => setShowReviewDialog(false)}
+          fareId={selectedFare.id}
+          companyId={getCompanyIdFromName(selectedFare.company)}
+          companyName={selectedFare.company}
+          existingReviews={getFareReviews(selectedFare.id)}
+        />
+      )}
     </div>
   );
 };

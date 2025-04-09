@@ -8,25 +8,37 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Check, X, Eye } from 'lucide-react';
+import { Check, X, Eye, Star, MessageSquare, BadgeCheck, ShieldCheck } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { transportCompanies, fakePromotionRequests } from '@/data/fakeData';
 
 const CompanyManagement = () => {
   const { toast } = useToast();
   
+  // Convert transport companies to the format we need
+  const initialCompanies = transportCompanies.map(company => ({
+    id: company.id,
+    name: company.name,
+    type: 'Bus',
+    contactPerson: `Contact for ${company.name}`,
+    contactEmail: `contact@${company.id}.com`,
+    submittedOn: '2023-07-15',
+    status: company.verified ? 'active' : 'pending'
+  }));
+
   // Mock data for pending companies
-  const [pendingCompanies, setPendingCompanies] = useState([
-    { id: '1', name: 'Express Transit', type: 'Bus', contactPerson: 'John Doe', contactEmail: 'john@expresstransit.com', submittedOn: '2023-08-15', status: 'pending' },
-    { id: '2', name: 'Metro Lines', type: 'Train', contactPerson: 'Jane Smith', contactEmail: 'jane@metrolines.com', submittedOn: '2023-08-14', status: 'pending' },
-    { id: '3', name: 'City Ferries', type: 'Ferry', contactPerson: 'Robert Brown', contactEmail: 'robert@cityferries.com', submittedOn: '2023-08-12', status: 'pending' },
-  ]);
+  const [pendingCompanies, setPendingCompanies] = useState(initialCompanies.filter(c => c.status === 'pending'));
   
   // Mock data for all companies
-  const [allCompanies, setAllCompanies] = useState([
-    { id: '4', name: 'Urban Transport', type: 'Bus', contactPerson: 'Sarah Johnson', contactEmail: 'sarah@urbantransport.com', submittedOn: '2023-07-20', status: 'active' },
-    { id: '5', name: 'Rail Connect', type: 'Train', contactPerson: 'Michael Wilson', contactEmail: 'michael@railconnect.com', submittedOn: '2023-07-15', status: 'active' },
-    { id: '6', name: 'Harbor Shuttles', type: 'Ferry', contactPerson: 'Emily Davis', contactEmail: 'emily@harborshuttles.com', submittedOn: '2023-07-10', status: 'active' },
-    ...pendingCompanies.map(company => ({ ...company }))
+  const [allCompanies, setAllCompanies] = useState(initialCompanies);
+
+  // Mock data for promotions
+  const [promotionRequests, setPromotionRequests] = useState(fakePromotionRequests);
+
+  // Mock data for reviews needing moderation
+  const [pendingReviews, setPendingReviews] = useState([
+    { id: '1', companyName: 'Peace Mass Transit', customerName: 'John Smith', rating: 2, comment: 'Driver was rude and bus was dirty', date: '2023-11-14', status: 'pending' },
+    { id: '2', companyName: 'GUO Transport', customerName: 'Mary Johnson', rating: 1, comment: 'Very late departure and uncomfortable seats', date: '2023-11-13', status: 'pending' },
   ]);
 
   const approveCompany = (id: string) => {
@@ -63,14 +75,60 @@ const CompanyManagement = () => {
     });
   };
 
+  const approvePromotion = (id: string) => {
+    setPromotionRequests(promotionRequests.map(promo => 
+      promo.id === id ? { ...promo, status: 'approved' } : promo
+    ));
+
+    toast({
+      title: "Promotion Approved",
+      description: "The promotion request has been approved and is now active.",
+    });
+  };
+
+  const rejectPromotion = (id: string) => {
+    setPromotionRequests(promotionRequests.map(promo => 
+      promo.id === id ? { ...promo, status: 'rejected' } : promo
+    ));
+
+    toast({
+      title: "Promotion Rejected",
+      description: "The promotion request has been rejected.",
+    });
+  };
+
+  const approveReview = (id: string) => {
+    setPendingReviews(pendingReviews.map(review => 
+      review.id === id ? { ...review, status: 'approved' } : review
+    ));
+
+    toast({
+      title: "Review Approved",
+      description: "The review has been approved and is now visible to users.",
+    });
+  };
+
+  const rejectReview = (id: string) => {
+    setPendingReviews(pendingReviews.map(review => 
+      review.id === id ? { ...review, status: 'rejected' } : review
+    ));
+
+    toast({
+      title: "Review Rejected",
+      description: "The review has been rejected and will not be shown to users.",
+    });
+  };
+
   return (
     <div className="space-y-6">
       <h1 className="text-3xl font-bold">Company Management</h1>
       
       <Tabs defaultValue="pending">
-        <TabsList>
+        <TabsList className="grid grid-cols-4 w-full">
           <TabsTrigger value="pending">Pending Verification</TabsTrigger>
           <TabsTrigger value="all">All Companies</TabsTrigger>
+          <TabsTrigger value="promotions">Promotion Requests</TabsTrigger>
+          <TabsTrigger value="reviews">Review Moderation</TabsTrigger>
         </TabsList>
         
         <TabsContent value="pending" className="mt-6">
@@ -156,7 +214,7 @@ const CompanyManagement = () => {
                                     Reject
                                   </Button>
                                   <Button onClick={() => approveCompany(company.id)}>
-                                    Approve
+                                    Approve & Verify
                                   </Button>
                                 </DialogFooter>
                               </DialogContent>
@@ -166,6 +224,13 @@ const CompanyManagement = () => {
                       </TableCell>
                     </TableRow>
                   ))}
+                  {pendingCompanies.length === 0 && (
+                    <TableRow>
+                      <TableCell colSpan={6} className="text-center py-4">
+                        No pending verification requests
+                      </TableCell>
+                    </TableRow>
+                  )}
                 </TableBody>
               </Table>
             </CardContent>
@@ -190,6 +255,7 @@ const CompanyManagement = () => {
                     <TableHead>Type</TableHead>
                     <TableHead>Contact Person</TableHead>
                     <TableHead>Status</TableHead>
+                    <TableHead>Verification</TableHead>
                     <TableHead className="text-right">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -208,11 +274,176 @@ const CompanyManagement = () => {
                           {company.status.charAt(0).toUpperCase() + company.status.slice(1)}
                         </Badge>
                       </TableCell>
+                      <TableCell>
+                        {company.status === 'active' ? (
+                          <div className="flex items-center">
+                            <ShieldCheck className="h-4 w-4 text-primary mr-1" />
+                            <span className="text-sm">Verified</span>
+                          </div>
+                        ) : (
+                          <span className="text-sm text-muted-foreground">Unverified</span>
+                        )}
+                      </TableCell>
                       <TableCell className="text-right">
                         <Button variant="ghost" size="sm">View</Button>
+                        {company.status !== 'active' && (
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={() => approveCompany(company.id)}
+                          >
+                            <BadgeCheck className="h-4 w-4 mr-1" />
+                            Verify
+                          </Button>
+                        )}
                       </TableCell>
                     </TableRow>
                   ))}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="promotions" className="mt-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Promotion Requests</CardTitle>
+              <CardDescription>Review and manage promotion requests from companies</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Company</TableHead>
+                    <TableHead>Type</TableHead>
+                    <TableHead>Requested</TableHead>
+                    <TableHead>Duration</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead className="text-right">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {promotionRequests.map((promo) => (
+                    <TableRow key={promo.id}>
+                      <TableCell>{promo.companyName}</TableCell>
+                      <TableCell>
+                        <Badge variant="outline" className="capitalize">
+                          {promo.type}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>{promo.requestDate}</TableCell>
+                      <TableCell>{promo.startDate} to {promo.endDate}</TableCell>
+                      <TableCell>
+                        <Badge variant={
+                          promo.status === 'approved' ? 'default' : 
+                          promo.status === 'rejected' ? 'destructive' : 
+                          'secondary'
+                        }>
+                          {promo.status.charAt(0).toUpperCase() + promo.status.slice(1)}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        {promo.status === 'pending' && (
+                          <>
+                            <Button 
+                              variant="outline" 
+                              size="sm" 
+                              className="mr-2"
+                              onClick={() => approvePromotion(promo.id)}
+                            >
+                              Approve
+                            </Button>
+                            <Button 
+                              variant="outline" 
+                              size="sm"
+                              onClick={() => rejectPromotion(promo.id)}
+                            >
+                              Reject
+                            </Button>
+                          </>
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                  {promotionRequests.length === 0 && (
+                    <TableRow>
+                      <TableCell colSpan={6} className="text-center py-4">
+                        No pending promotion requests
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="reviews" className="mt-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Review Moderation</CardTitle>
+              <CardDescription>Moderate user reviews for transport companies</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Company</TableHead>
+                    <TableHead>User</TableHead>
+                    <TableHead>Rating</TableHead>
+                    <TableHead>Review</TableHead>
+                    <TableHead>Date</TableHead>
+                    <TableHead className="text-right">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {pendingReviews.map((review) => (
+                    <TableRow key={review.id}>
+                      <TableCell>{review.companyName}</TableCell>
+                      <TableCell>{review.customerName}</TableCell>
+                      <TableCell>
+                        <div className="flex">
+                          {[...Array(5)].map((_, i) => (
+                            <Star 
+                              key={i} 
+                              className={`h-4 w-4 ${i < review.rating ? 'text-yellow-500 fill-yellow-500' : 'text-gray-300'}`} 
+                            />
+                          ))}
+                        </div>
+                      </TableCell>
+                      <TableCell>{review.comment}</TableCell>
+                      <TableCell>{review.date}</TableCell>
+                      <TableCell className="text-right">
+                        {review.status === 'pending' && (
+                          <>
+                            <Button 
+                              variant="outline" 
+                              size="sm" 
+                              className="mr-2"
+                              onClick={() => approveReview(review.id)}
+                            >
+                              Approve
+                            </Button>
+                            <Button 
+                              variant="outline" 
+                              size="sm"
+                              onClick={() => rejectReview(review.id)}
+                            >
+                              Reject
+                            </Button>
+                          </>
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                  {pendingReviews.length === 0 && (
+                    <TableRow>
+                      <TableCell colSpan={6} className="text-center py-4">
+                        No reviews pending moderation
+                      </TableCell>
+                    </TableRow>
+                  )}
                 </TableBody>
               </Table>
             </CardContent>
