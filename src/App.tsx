@@ -47,53 +47,55 @@ const AppLayout = () => {
   if (isAuthPage(location.pathname)) {
     // Render authentication pages without sidebar
     return (
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/view-selection" element={<ViewSelection />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+      <div className="min-h-screen bg-background">
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/view-selection" element={<ViewSelection />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </div>
     );
   }
   
   // Render app pages with sidebar
   return (
     <SidebarProvider>
-      <div className="flex min-h-screen w-full">
+      <div className="flex min-h-screen w-full bg-background">
         <AppSidebar />
-        <SidebarInset className="flex-1">
-          <div className="p-4">
-            <div className="mb-4 flex items-center justify-between">
-              <div className="flex items-center">
+        <SidebarInset className="flex-1 flex flex-col">
+          <Navbar />
+          <main className="flex-1 p-0">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+              <div className="flex items-center mb-6">
                 <SidebarTrigger className="mr-2" />
-                <h1 className="text-2xl font-bold">Go Fare</h1>
+                <h1 className="text-2xl font-medium tracking-tight">Go Fare</h1>
               </div>
-              <Navbar />
+              <Routes>
+                {/* User Routes */}
+                <Route path="/" element={<Index />} />
+                <Route path="/compare" element={<Compare />} />
+                <Route path="/report" element={<Report />} />
+                <Route path="/settings" element={<Settings />} />
+                
+                {/* Company Routes */}
+                <Route path="/company/dashboard" element={<CompanyDashboard />} />
+                <Route path="/company/manage-fares" element={<ManageFares />} />
+                <Route path="/company/price-history" element={<PriceHistory />} />
+                <Route path="/company/analytics" element={<CompanyAnalytics />} />
+                
+                {/* Admin Routes */}
+                <Route path="/admin/dashboard" element={<AdminDashboard />} />
+                <Route path="/admin/manage-fares" element={<AdminManageFares />} />
+                <Route path="/admin/company-management" element={<CompanyManagement />} />
+                <Route path="/admin/user-reports" element={<UserReports />} />
+                <Route path="/admin/analytics" element={<AdminAnalytics />} />
+                
+                {/* 404 Route */}
+                <Route path="*" element={<NotFound />} />
+              </Routes>
             </div>
-            <Routes>
-              {/* User Routes */}
-              <Route path="/" element={<Index />} />
-              <Route path="/compare" element={<Compare />} />
-              <Route path="/report" element={<Report />} />
-              <Route path="/settings" element={<Settings />} />
-              
-              {/* Company Routes */}
-              <Route path="/company/dashboard" element={<CompanyDashboard />} />
-              <Route path="/company/manage-fares" element={<ManageFares />} />
-              <Route path="/company/price-history" element={<PriceHistory />} />
-              <Route path="/company/analytics" element={<CompanyAnalytics />} />
-              
-              {/* Admin Routes */}
-              <Route path="/admin/dashboard" element={<AdminDashboard />} />
-              <Route path="/admin/manage-fares" element={<AdminManageFares />} />
-              <Route path="/admin/company-management" element={<CompanyManagement />} />
-              <Route path="/admin/user-reports" element={<UserReports />} />
-              <Route path="/admin/analytics" element={<AdminAnalytics />} />
-              
-              {/* 404 Route */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </div>
+          </main>
         </SidebarInset>
       </div>
     </SidebarProvider>

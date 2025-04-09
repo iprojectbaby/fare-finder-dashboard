@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { 
   Home, 
@@ -9,13 +9,14 @@ import {
   BarChart3, 
   PencilRuler, 
   History, 
-  PieChart,
   LayoutDashboard,
   ClipboardCheck,
   Building,
   FileWarning,
   ChartBar,
-  LogOut
+  LogOut,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
 import {
   Sidebar,
@@ -37,11 +38,10 @@ export function AppSidebar() {
   const location = useLocation();
   const navigate = useNavigate();
   const { toast } = useToast();
-  // Get the role from sessionStorage on first load
-  const [userRole, setUserRole] = useState<'user' | 'company' | 'admin'>(() => {
-    const storedRole = sessionStorage.getItem('selectedRole') as 'user' | 'company' | 'admin' | null;
-    return storedRole || 'user';
-  });
+  const [collapsed, setCollapsed] = useState(false);
+  
+  // Get the role from sessionStorage
+  const userRole = sessionStorage.getItem('selectedRole') as 'user' | 'company' | 'admin' || 'user';
   
   // Menu items for regular users
   const userMenuItems = [
@@ -133,29 +133,42 @@ export function AppSidebar() {
     navigate('/view-selection');
   };
 
+  const toggleCollapse = () => {
+    setCollapsed(!collapsed);
+  };
+
   return (
-    <Sidebar>
-      <SidebarHeader className="p-4">
+    <Sidebar className="linear-sidebar border-r border-border/60 bg-card">
+      <SidebarHeader className="p-4 flex items-center justify-between">
         <div className="flex items-center space-x-2">
-          <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center">
-            <span className="font-bold text-sm">GF</span>
+          <div className="w-8 h-8 rounded-md bg-primary/10 text-primary flex items-center justify-center">
+            <span className="font-medium text-sm">GF</span>
           </div>
-          <div className="font-bold text-lg">Go Fare</div>
+          {!collapsed && (
+            <div className="font-medium text-base">Go Fare</div>
+          )}
         </div>
-        <div className="mt-2 text-sm text-muted-foreground">
-          {userRole === 'company' ? 'Company Portal' : 
-           userRole === 'admin' ? 'Admin Portal' : 
-           'User Portal'}
-        </div>
+        <Button 
+          variant="ghost" 
+          size="sm" 
+          className="text-foreground/70" 
+          onClick={toggleCollapse}
+        >
+          {collapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
+        </Button>
       </SidebarHeader>
-      <SidebarSeparator />
+      
+      <SidebarSeparator className="bg-border/60" />
+      
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>
-            {userRole === 'company' ? 'Company Portal' : 
-             userRole === 'admin' ? 'Admin Portal' : 
-             'Navigation'}
-          </SidebarGroupLabel>
+          {!collapsed && (
+            <SidebarGroupLabel className="text-xs font-medium text-muted-foreground px-4 py-2">
+              {userRole === 'company' ? 'Company Portal' : 
+               userRole === 'admin' ? 'Admin Portal' : 
+               'Navigation'}
+            </SidebarGroupLabel>
+          )}
           <SidebarGroupContent>
             <SidebarMenu>
               {menuItems.map((item) => (
@@ -163,11 +176,12 @@ export function AppSidebar() {
                   <SidebarMenuButton 
                     asChild 
                     isActive={location.pathname === item.url}
-                    tooltip={item.title}
+                    tooltip={collapsed ? item.title : undefined}
+                    className={`py-2 ${collapsed ? 'justify-center' : ''}`}
                   >
-                    <Link to={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
+                    <Link to={item.url} className="flex items-center space-x-3">
+                      <item.icon className="h-4 w-4" />
+                      {!collapsed && <span className="text-sm">{item.title}</span>}
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -176,18 +190,22 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter className="p-4">
+      
+      <SidebarFooter className={`p-4 ${collapsed ? 'flex justify-center' : ''}`}>
         <Button 
-          variant="outline" 
-          className="w-full flex items-center justify-center gap-2 mb-4"
+          variant="ghost" 
+          size="sm"
+          className={`text-foreground/70 hover:text-destructive ${collapsed ? 'w-auto' : 'w-full'} flex items-center justify-center`}
           onClick={handleLogout}
         >
           <LogOut className="h-4 w-4" />
-          <span>Logout</span>
+          {!collapsed && <span className="ml-2 text-sm">Logout</span>}
         </Button>
-        <div className="text-xs text-muted-foreground">
-          Go Fare v1.0
-        </div>
+        {!collapsed && (
+          <div className="mt-4 text-xs text-muted-foreground text-center">
+            Go Fare v1.0
+          </div>
+        )}
       </SidebarFooter>
     </Sidebar>
   );

@@ -25,23 +25,23 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
   };
 
   return (
-    <div className="search-container p-5">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="relative">
-          <div className="flex items-center border rounded-md p-2 focus-within:ring-2 focus-within:ring-primary">
-            <MapPin className="h-5 w-5 text-muted-foreground" />
+    <div className="search-container p-4 mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-7 gap-4">
+        <div className="relative md:col-span-3">
+          <div className="flex items-center border border-border/60 rounded-md p-2 focus-within:ring-1 focus-within:ring-primary/30 focus-within:border-primary/30 bg-background transition-all">
+            <MapPin className="h-4 w-4 text-muted-foreground mx-2" />
             <Input
               type="text"
               placeholder="From"
-              className="border-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+              className="border-0 focus-visible:ring-0 focus-visible:ring-offset-0 bg-transparent"
               value={from}
               onChange={(e) => setFrom(e.target.value)}
               onFocus={() => setShowFromSuggestions(true)}
               onBlur={() => setTimeout(() => setShowFromSuggestions(false), 200)}
             />
           </div>
-          {showFromSuggestions && (
-            <div className="absolute mt-1 w-full rounded-md bg-white shadow-lg z-10 py-1 max-h-60 overflow-auto">
+          {showFromSuggestions && from.length > 0 && (
+            <div className="absolute mt-1 w-full rounded-md bg-card border border-border/60 shadow-sm z-10 py-1 max-h-60 overflow-auto">
               {popularDestinations
                 .filter((city) => 
                   city.name.toLowerCase().includes(from.toLowerCase()) || 
@@ -50,35 +50,39 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
                 .map((city) => (
                   <div
                     key={city.code}
-                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                    className="px-4 py-2 hover:bg-secondary cursor-pointer"
                     onClick={() => {
                       setFrom(city.name);
                       setShowFromSuggestions(false);
                     }}
                   >
-                    <div className="font-medium">{city.name}</div>
-                    <div className="text-sm text-gray-500">{city.code}</div>
+                    <div className="font-medium text-sm">{city.name}</div>
+                    <div className="text-xs text-muted-foreground">{city.code}</div>
                   </div>
                 ))}
             </div>
           )}
         </div>
 
-        <div className="relative">
-          <div className="flex items-center border rounded-md p-2 focus-within:ring-2 focus-within:ring-primary">
-            <ArrowRight className="h-5 w-5 text-muted-foreground" />
+        <div className="hidden md:flex items-center justify-center">
+          <ArrowRight className="h-4 w-4 text-muted-foreground" />
+        </div>
+
+        <div className="relative md:col-span-3">
+          <div className="flex items-center border border-border/60 rounded-md p-2 focus-within:ring-1 focus-within:ring-primary/30 focus-within:border-primary/30 bg-background transition-all">
+            <MapPin className="h-4 w-4 text-muted-foreground mx-2" />
             <Input
               type="text"
               placeholder="To"
-              className="border-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+              className="border-0 focus-visible:ring-0 focus-visible:ring-offset-0 bg-transparent"
               value={to}
               onChange={(e) => setTo(e.target.value)}
               onFocus={() => setShowToSuggestions(true)}
               onBlur={() => setTimeout(() => setShowToSuggestions(false), 200)}
             />
           </div>
-          {showToSuggestions && (
-            <div className="absolute mt-1 w-full rounded-md bg-white shadow-lg z-10 py-1 max-h-60 overflow-auto">
+          {showToSuggestions && to.length > 0 && (
+            <div className="absolute mt-1 w-full rounded-md bg-card border border-border/60 shadow-sm z-10 py-1 max-h-60 overflow-auto">
               {popularDestinations
                 .filter((city) => 
                   city.name.toLowerCase().includes(to.toLowerCase()) || 
@@ -87,14 +91,14 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
                 .map((city) => (
                   <div
                     key={city.code}
-                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                    className="px-4 py-2 hover:bg-secondary cursor-pointer"
                     onClick={() => {
                       setTo(city.name);
                       setShowToSuggestions(false);
                     }}
                   >
-                    <div className="font-medium">{city.name}</div>
-                    <div className="text-sm text-gray-500">{city.code}</div>
+                    <div className="font-medium text-sm">{city.name}</div>
+                    <div className="text-xs text-muted-foreground">{city.code}</div>
                   </div>
                 ))}
             </div>
@@ -103,10 +107,10 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
 
         <Button 
           onClick={handleSearch} 
-          className="bg-primary hover:bg-primary/90 text-white py-2"
+          className="md:col-span-1"
         >
-          <Search className="mr-2 h-4 w-4" />
-          Find Fares
+          <Search className="h-4 w-4 mr-2" />
+          Find
         </Button>
       </div>
     </div>

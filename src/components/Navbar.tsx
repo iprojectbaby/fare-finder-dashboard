@@ -1,7 +1,7 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Menu, X, Bell, User, LogOut } from 'lucide-react';
+import { Menu, X, Bell, User, LogOut, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import {
@@ -18,20 +18,16 @@ const Navbar: React.FC = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   
-  // We'll consider the user logged in if there's a selectedRole in sessionStorage
+  // Check if user is logged in based on sessionStorage
   const isLoggedIn = !!sessionStorage.getItem('selectedRole');
   const userRole = sessionStorage.getItem('selectedRole') as 'user' | 'company' | 'admin' | null;
   
   const handleLogout = () => {
-    // Clear the selected role from sessionStorage
     sessionStorage.removeItem('selectedRole');
-    
     toast({
       title: "Logged out",
       description: "You have been successfully logged out",
     });
-    
-    // Navigate to view selection page after logout
     navigate('/view-selection');
   };
 
@@ -43,7 +39,7 @@ const Navbar: React.FC = () => {
           { name: 'Dashboard', path: '/admin/dashboard' },
           { name: 'Manage Fares', path: '/admin/manage-fares' },
           { name: 'Companies', path: '/admin/company-management' },
-          { name: 'User Reports', path: '/admin/user-reports' },
+          { name: 'Reports', path: '/admin/user-reports' },
           { name: 'Analytics', path: '/admin/analytics' }
         ];
       case 'company':
@@ -66,86 +62,105 @@ const Navbar: React.FC = () => {
   const navLinks = getNavLinks();
 
   return (
-    <nav className="w-full z-40 bg-white dark:bg-gray-900">
-      <div className="flex justify-between">
-        <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
-          {navLinks.map((link) => (
-            <Link
-              key={link.path}
-              to={link.path}
-              className="border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
-            >
-              {link.name}
-            </Link>
-          ))}
-        </div>
-        <div className="sm:ml-6 sm:flex sm:items-center">
-          {isLoggedIn ? (
-            <>
-              <Button variant="ghost" size="icon" className="relative">
-                <Bell className="h-5 w-5" />
-                <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-accent"></span>
-              </Button>
-              <div className="ml-3 relative">
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon" className="rounded-full">
-                      <User className="h-5 w-5" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem>
-                      <Link to={userRole === 'admin' ? '/admin/dashboard' : 
-                               userRole === 'company' ? '/company/dashboard' : 
-                               '/settings'} className="w-full">Profile</Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <Link to={userRole === 'admin' ? '/admin/dashboard' : 
-                               userRole === 'company' ? '/company/dashboard' : 
-                               '/settings'} className="w-full">Settings</Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>Saved Routes</DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={handleLogout}>
-                      <LogOut className="mr-2 h-4 w-4" />
-                      Sign out
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
-            </>
-          ) : (
-            <div className="flex space-x-4">
-              <Button variant="outline" onClick={() => navigate('/login')}>
-                Sign In
-              </Button>
-              <Button variant="default" onClick={() => navigate('/register')}>
-                Sign Up
-              </Button>
-            </div>
-          )}
-        </div>
-        <div className="flex items-center sm:hidden">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
-            {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-          </Button>
-        </div>
-      </div>
-
-      {isMenuOpen && (
-        <div className="sm:hidden">
-          <div className="pt-2 pb-3 space-y-1">
+    <nav className="w-full z-40 bg-card border-b border-border/60">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between h-16">
+          {/* Desktop Nav Links */}
+          <div className="hidden sm:flex items-center space-x-8">
             {navLinks.map((link) => (
               <Link
                 key={link.path}
                 to={link.path}
-                className="border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
+                className="text-foreground/70 hover:text-foreground transition-colors text-sm font-medium"
+              >
+                {link.name}
+              </Link>
+            ))}
+          </div>
+          
+          {/* Right Section - Search & User */}
+          <div className="flex items-center space-x-4">
+            <Button variant="ghost" size="icon" className="text-foreground/70 hover:text-foreground">
+              <Search className="h-4 w-4" />
+            </Button>
+            
+            {isLoggedIn ? (
+              <>
+                <Button variant="ghost" size="icon" className="relative text-foreground/70 hover:text-foreground">
+                  <Bell className="h-4 w-4" />
+                  <span className="absolute top-1 right-1 block h-1.5 w-1.5 rounded-full bg-accent"></span>
+                </Button>
+                
+                <div className="relative">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="sm" className="rounded-full h-8 w-8 p-0 bg-secondary">
+                        <span className="sr-only">Open user menu</span>
+                        <User className="h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-56">
+                      <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem asChild>
+                        <Link to={userRole === 'admin' ? '/admin/dashboard' : 
+                                userRole === 'company' ? '/company/dashboard' : 
+                                '/settings'} className="w-full">
+                          Profile
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem asChild>
+                        <Link to={userRole === 'admin' ? '/admin/dashboard' : 
+                                userRole === 'company' ? '/company/dashboard' : 
+                                '/settings'} className="w-full">
+                          Settings
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem>Saved Routes</DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem onClick={handleLogout} className="text-destructive focus:text-destructive">
+                        <LogOut className="mr-2 h-4 w-4" />
+                        Sign out
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
+              </>
+            ) : (
+              <div className="flex items-center space-x-3">
+                <Button variant="ghost" size="sm" onClick={() => navigate('/login')} className="text-sm">
+                  Sign In
+                </Button>
+                <Button variant="default" size="sm" onClick={() => navigate('/register')} className="text-sm">
+                  Sign Up
+                </Button>
+              </div>
+            )}
+            
+            {/* Mobile menu button */}
+            <div className="sm:hidden">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                className="text-foreground/70 hover:text-foreground"
+              >
+                {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile menu */}
+      {isMenuOpen && (
+        <div className="sm:hidden bg-card border-t border-border/60">
+          <div className="py-2 space-y-1 px-4">
+            {navLinks.map((link) => (
+              <Link
+                key={link.path}
+                to={link.path}
+                className="block py-2 text-foreground/70 hover:text-foreground text-sm"
                 onClick={() => setIsMenuOpen(false)}
               >
                 {link.name}
@@ -153,11 +168,12 @@ const Navbar: React.FC = () => {
             ))}
           </div>
           
-          {!isLoggedIn && (
-            <div className="pt-4 pb-3 border-t border-gray-200">
+          {!isLoggedIn ? (
+            <div className="pt-2 pb-3 border-t border-border/60">
               <div className="flex items-center justify-center space-x-4 px-4 py-2">
                 <Button 
                   variant="outline" 
+                  size="sm"
                   className="w-full"
                   onClick={() => {
                     setIsMenuOpen(false);
@@ -167,7 +183,8 @@ const Navbar: React.FC = () => {
                   Sign In
                 </Button>
                 <Button 
-                  variant="default" 
+                  variant="default"
+                  size="sm" 
                   className="w-full"
                   onClick={() => {
                     setIsMenuOpen(false);
@@ -178,28 +195,25 @@ const Navbar: React.FC = () => {
                 </Button>
               </div>
             </div>
-          )}
-          
-          {isLoggedIn && (
-            <div className="pt-4 pb-3 border-t border-gray-200">
+          ) : (
+            <div className="pt-2 pb-3 border-t border-border/60">
               <div className="flex items-center px-4">
                 <div className="flex-shrink-0">
-                  <User className="h-10 w-10 rounded-full bg-gray-200 p-2" />
+                  <div className="h-8 w-8 rounded-full bg-secondary flex items-center justify-center">
+                    <User className="h-4 w-4" />
+                  </div>
                 </div>
                 <div className="ml-3">
-                  <div className="text-base font-medium text-gray-800">User Name</div>
-                  <div className="text-sm font-medium text-gray-500">user@example.com</div>
+                  <div className="text-sm font-medium text-foreground">User Name</div>
+                  <div className="text-xs font-medium text-muted-foreground">user@example.com</div>
                 </div>
-                <Button variant="ghost" size="icon" className="ml-auto">
-                  <Bell className="h-5 w-5" />
-                </Button>
               </div>
-              <div className="mt-3 space-y-1">
+              <div className="mt-3 space-y-1 px-4">
                 <Link
                   to={userRole === 'admin' ? '/admin/dashboard' : 
                       userRole === 'company' ? '/company/dashboard' : 
                       '/settings'}
-                  className="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100"
+                  className="block py-2 text-sm text-foreground/70 hover:text-foreground"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Your Profile
@@ -208,7 +222,7 @@ const Navbar: React.FC = () => {
                   to={userRole === 'admin' ? '/admin/dashboard' : 
                       userRole === 'company' ? '/company/dashboard' : 
                       '/settings'}
-                  className="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100"
+                  className="block py-2 text-sm text-foreground/70 hover:text-foreground"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Settings
@@ -218,7 +232,7 @@ const Navbar: React.FC = () => {
                     handleLogout();
                     setIsMenuOpen(false);
                   }}
-                  className="block w-full text-left px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100"
+                  className="block w-full text-left py-2 text-sm text-destructive"
                 >
                   Sign out
                 </button>
