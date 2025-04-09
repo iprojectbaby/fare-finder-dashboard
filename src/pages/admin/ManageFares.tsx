@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -17,16 +18,16 @@ const AdminManageFares = () => {
   
   // Mock data for fares pending approval
   const [pendingFares, setPendingFares] = useState([
-    { id: '1', company: 'Express Transit', route: 'City A to City B', oldPrice: 25.00, newPrice: 27.50, submittedOn: '2023-08-15', status: 'pending' },
-    { id: '2', company: 'Metro Lines', route: 'City C to City D', oldPrice: 18.50, newPrice: 22.00, submittedOn: '2023-08-14', status: 'pending' },
-    { id: '3', company: 'City Ferries', route: 'Harbor to Downtown', oldPrice: 12.00, newPrice: 15.00, submittedOn: '2023-08-12', status: 'pending' },
+    { id: '1', company: 'Peace Mass Transit', route: 'Enugu to Lagos', oldPrice: 17500, newPrice: 18500, submittedOn: '2023-08-15', status: 'pending' },
+    { id: '2', company: 'GUO Transport', route: 'Enugu to Abuja', oldPrice: 15000, newPrice: 16000, submittedOn: '2023-08-14', status: 'pending' },
+    { id: '3', company: 'ABC Transport', route: 'Enugu to Port Harcourt', oldPrice: 7200, newPrice: 7800, submittedOn: '2023-08-12', status: 'pending' },
   ]);
   
   // Mock data for all fares
   const [allFares, setAllFares] = useState([
-    { id: '4', company: 'Express Transit', route: 'City B to City C', price: 15.00, status: 'active', lastUpdated: '2023-07-20' },
-    { id: '5', company: 'Metro Lines', route: 'City A to City D', price: 32.00, status: 'active', lastUpdated: '2023-07-15' },
-    { id: '6', company: 'City Ferries', route: 'Downtown to Island', price: 22.00, status: 'active', lastUpdated: '2023-07-10' },
+    { id: '4', company: 'Peace Mass Transit', route: 'Enugu to Nsukka', price: 1500, status: 'active', lastUpdated: '2023-07-20' },
+    { id: '5', company: 'GUO Transport', route: 'Enugu to Onitsha', price: 3500, status: 'active', lastUpdated: '2023-07-15' },
+    { id: '6', company: 'Young Shall Grow', route: 'Enugu to Owerri', price: 4500, status: 'active', lastUpdated: '2023-07-10' },
     ...pendingFares.map(fare => ({ 
       id: fare.id, 
       company: fare.company, 
@@ -110,8 +111,8 @@ const AdminManageFares = () => {
                     <TableRow key={fare.id}>
                       <TableCell>{fare.company}</TableCell>
                       <TableCell>{fare.route}</TableCell>
-                      <TableCell>${fare.oldPrice.toFixed(2)}</TableCell>
-                      <TableCell>${fare.newPrice.toFixed(2)}</TableCell>
+                      <TableCell>₦{fare.oldPrice.toLocaleString()}</TableCell>
+                      <TableCell>₦{fare.newPrice.toLocaleString()}</TableCell>
                       <TableCell className={fare.newPrice > fare.oldPrice ? "text-red-500" : "text-green-500"}>
                         {fare.newPrice > fare.oldPrice 
                           ? `+${((fare.newPrice - fare.oldPrice) / fare.oldPrice * 100).toFixed(1)}%` 
@@ -160,11 +161,11 @@ const AdminManageFares = () => {
                                   </div>
                                   <div className="grid grid-cols-4 items-center gap-4">
                                     <Label className="text-right">Current Price</Label>
-                                    <div className="col-span-3">${fare.oldPrice.toFixed(2)}</div>
+                                    <div className="col-span-3">₦{fare.oldPrice.toLocaleString()}</div>
                                   </div>
                                   <div className="grid grid-cols-4 items-center gap-4">
                                     <Label className="text-right">New Price</Label>
-                                    <div className="col-span-3">${fare.newPrice.toFixed(2)}</div>
+                                    <div className="col-span-3">₦{fare.newPrice.toLocaleString()}</div>
                                   </div>
                                   <div className="grid grid-cols-4 items-center gap-4">
                                     <Label className="text-right">Submitted On</Label>
@@ -230,7 +231,7 @@ const AdminManageFares = () => {
                     <TableRow key={fare.id}>
                       <TableCell>{fare.company}</TableCell>
                       <TableCell>{fare.route}</TableCell>
-                      <TableCell>${fare.price.toFixed(2)}</TableCell>
+                      <TableCell>₦{fare.price.toLocaleString()}</TableCell>
                       <TableCell>
                         <Badge variant={
                           fare.status === 'active' ? 'default' : 

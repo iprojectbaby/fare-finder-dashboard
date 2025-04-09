@@ -56,14 +56,14 @@ export interface PromotionRequest {
 export const popularDestinations = [
   { name: "Enugu", code: "ENU" },
   { name: "Nsukka", code: "NSK" },
+  { name: "Abakpa", code: "ABK" },
+  { name: "9th Mile", code: "9ML" },
+  { name: "Trans-Ekulu", code: "TEK" },
+  { name: "New Haven", code: "NHV" },
+  { name: "Emene", code: "EME" },
+  { name: "Holy Ghost", code: "HLG" },
   { name: "Awgu", code: "AWG" },
-  { name: "Udi", code: "UDI" },
-  { name: "Oji River", code: "OJR" },
-  { name: "Ezeagu", code: "EZA" },
-  { name: "Nkanu", code: "NKA" },
-  { name: "Abakaliki", code: "ABK" },
-  { name: "Onitsha", code: "ONI" },
-  { name: "Owerri", code: "OWE" }
+  { name: "Independence Layout", code: "IND" }
 ];
 
 export const transportCompanies = [
@@ -71,15 +71,15 @@ export const transportCompanies = [
   { name: "GUO Transport", id: "guo-transport", verified: true },
   { name: "ABC Transport", id: "abc-transport", verified: false },
   { name: "God is Good Motors", id: "gigm", verified: true },
-  { name: "Enugu City Transport", id: "enugu-city", verified: false },
+  { name: "Young Shall Grow", id: "young-shall-grow", verified: true },
   { name: "Ifesinachi Transport", id: "ifesinachi", verified: false }
 ];
 
 export const fakeHistoricalPrices = {
   "ENU-NSK": [1200, 1300, 1400, 1250, 1350, 1450, 1500],
-  "ENU-OWE": [2500, 2400, 2600, 2700, 2550, 2450, 2600],
-  "ENU-ONI": [1800, 1900, 1750, 1850, 2000, 1950, 1900],
-  "ENU-ABK": [1000, 1100, 1050, 1150, 1200, 1100, 1150]
+  "ENU-ABJ": [15000, 14500, 15500, 16000, 15200, 15800, 16500],
+  "ENU-LOS": [18000, 17500, 18500, 19000, 18200, 18800, 19500],
+  "ENU-PHC": [7500, 7200, 7800, 8000, 7400, 7600, 8200]
 };
 
 export const transportFares: FareData[] = [
@@ -105,11 +105,11 @@ export const transportFares: FareData[] = [
     company: "GUO Transport",
     route: {
       from: "Enugu",
-      to: "Nsukka"
+      to: "Lagos"
     },
-    price: 1300,
+    price: 18500,
     discount: 10,
-    duration: "1h 45m",
+    duration: "8h 45m",
     departureTime: "09:15 AM",
     transportType: "bus",
     logo: "https://via.placeholder.com/50",
@@ -122,10 +122,10 @@ export const transportFares: FareData[] = [
     company: "ABC Transport",
     route: {
       from: "Enugu",
-      to: "Owerri"
+      to: "Abuja"
     },
-    price: 2600,
-    duration: "2h 45m",
+    price: 16000,
+    duration: "7h 30m",
     departureTime: "10:00 AM",
     transportType: "bus",
     logo: "https://via.placeholder.com/50",
@@ -137,10 +137,10 @@ export const transportFares: FareData[] = [
     company: "God is Good Motors",
     route: {
       from: "Enugu",
-      to: "Onitsha"
+      to: "Port Harcourt"
     },
-    price: 1900,
-    duration: "2h 00m",
+    price: 7800,
+    duration: "4h 00m",
     departureTime: "11:30 AM",
     transportType: "bus",
     logo: "https://via.placeholder.com/50",
@@ -149,13 +149,13 @@ export const transportFares: FareData[] = [
   },
   {
     id: "5",
-    company: "Enugu City Transport",
+    company: "Young Shall Grow",
     route: {
       from: "Enugu",
-      to: "Awgu"
+      to: "Onitsha"
     },
-    price: 800,
-    duration: "1h 10m",
+    price: 3500,
+    duration: "2h 20m",
     departureTime: "09:00 AM",
     transportType: "bus",
     logo: "https://via.placeholder.com/50",
@@ -167,11 +167,11 @@ export const transportFares: FareData[] = [
     company: "Ifesinachi Transport",
     route: {
       from: "Enugu",
-      to: "Abakaliki"
+      to: "Owerri"
     },
-    price: 1150,
+    price: 4500,
     discount: 15,
-    duration: "1h 30m",
+    duration: "3h 00m",
     departureTime: "07:45 AM",
     transportType: "bus",
     logo: "https://via.placeholder.com/50",
@@ -182,10 +182,10 @@ export const transportFares: FareData[] = [
     id: "7",
     company: "Peace Mass Transit",
     route: {
-      from: "Enugu",
-      to: "Udi"
+      from: "Nsukka",
+      to: "Holy Ghost"
     },
-    price: 600,
+    price: 1600,
     duration: "45m",
     departureTime: "08:00 AM",
     transportType: "bus",
@@ -197,16 +197,76 @@ export const transportFares: FareData[] = [
     id: "8",
     company: "GUO Transport",
     route: {
-      from: "Enugu",
-      to: "Oji River"
+      from: "Abakpa",
+      to: "New Haven"
     },
     price: 750,
-    duration: "1h 00m",
+    duration: "35m",
     departureTime: "10:30 AM",
     transportType: "bus",
     logo: "https://via.placeholder.com/50",
     rating: 4.4,
+    amenities: ["Air Conditioning", "Comfortable Seats"]
+  },
+  {
+    id: "9",
+    company: "Ifesinachi Transport",
+    route: {
+      from: "Enugu",
+      to: "Calabar"
+    },
+    price: 9500,
+    duration: "5h 30m",
+    departureTime: "06:45 AM",
+    transportType: "bus",
+    logo: "https://via.placeholder.com/50",
+    rating: 4.2,
+    amenities: ["Air Conditioning", "Refreshments", "Extra Baggage", "Power Outlets"]
+  },
+  {
+    id: "10",
+    company: "ABC Transport",
+    route: {
+      from: "Enugu",
+      to: "Uyo"
+    },
+    price: 8500,
+    duration: "4h 45m",
+    departureTime: "08:00 AM",
+    transportType: "bus",
+    logo: "https://via.placeholder.com/50",
+    rating: 4.0,
     amenities: ["Air Conditioning", "Comfortable Seats", "Storage Space"]
+  },
+  {
+    id: "11",
+    company: "God is Good Motors",
+    route: {
+      from: "Trans-Ekulu",
+      to: "Independence Layout"
+    },
+    price: 850,
+    duration: "30m",
+    departureTime: "07:30 AM",
+    transportType: "bus",
+    logo: "https://via.placeholder.com/50",
+    rating: 3.8,
+    amenities: ["Basic Seating"]
+  },
+  {
+    id: "12",
+    company: "Young Shall Grow",
+    route: {
+      from: "Enugu",
+      to: "Benin City"
+    },
+    price: 12500,
+    duration: "6h 15m",
+    departureTime: "07:00 AM",
+    transportType: "bus",
+    logo: "https://via.placeholder.com/50",
+    rating: 4.1,
+    amenities: ["Air Conditioning", "Comfortable Seats", "Free Water"]
   }
 ];
 

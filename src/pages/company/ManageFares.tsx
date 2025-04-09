@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -23,8 +22,8 @@ const ManageFares = () => {
   // Mock data for the fares
   const [fares, setFares] = useState([
     { id: '1', from: 'Enugu', to: 'Nsukka', price: 1500, transportType: 'bus', featured: false, verified: true, lastUpdated: '2023-11-10' },
-    { id: '2', from: 'Enugu', to: 'Abakaliki', price: 1150, transportType: 'bus', featured: true, verified: true, lastUpdated: '2023-11-08' },
-    { id: '3', from: 'Enugu', to: 'Owerri', price: 2600, transportType: 'bus', featured: false, verified: true, lastUpdated: '2023-11-05' },
+    { id: '2', from: 'Enugu', to: 'Lagos', price: 18500, transportType: 'bus', featured: true, verified: true, lastUpdated: '2023-11-08' },
+    { id: '3', from: 'Enugu', to: 'Abuja', price: 16000, transportType: 'bus', featured: false, verified: true, lastUpdated: '2023-11-05' },
   ]);
 
   const [promotionRequest, setPromotionRequest] = useState({
@@ -45,8 +44,8 @@ const ManageFares = () => {
   // Mock data for bookings
   const [bookings, setBookings] = useState([
     { id: '1', customerName: 'John Doe', from: 'Enugu', to: 'Nsukka', date: '2023-11-20', seats: 1, status: 'pending' },
-    { id: '2', customerName: 'Jane Smith', from: 'Enugu', to: 'Abakaliki', date: '2023-11-22', seats: 2, status: 'confirmed' },
-    { id: '3', customerName: 'Mark Wilson', from: 'Enugu', to: 'Owerri', date: '2023-11-18', seats: 1, status: 'completed' },
+    { id: '2', customerName: 'Jane Smith', from: 'Enugu', to: 'Lagos', date: '2023-11-22', seats: 2, status: 'confirmed' },
+    { id: '3', customerName: 'Mark Wilson', from: 'Enugu', to: 'Abuja', date: '2023-11-18', seats: 1, status: 'completed' },
   ]);
 
   // Mock data for reviews
@@ -56,7 +55,6 @@ const ManageFares = () => {
     { id: '3', customerName: 'Charlie Brown', rating: 3, comment: 'Average experience, slightly delayed', date: '2023-11-01', status: 'pending' },
   ]);
 
-  // Handle real-time fare updates
   const handleAddFare = () => {
     if (!newFare.from || !newFare.to || !newFare.price) {
       toast({

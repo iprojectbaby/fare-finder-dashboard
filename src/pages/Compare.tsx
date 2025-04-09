@@ -89,7 +89,7 @@ const Compare = () => {
         fare.company === company && 
         fare.route.from.toLowerCase().includes(fromLocation.toLowerCase()) && 
         fare.route.to.toLowerCase().includes(toLocation.toLowerCase())
-      )?.price || 50;
+      )?.price || 5000;
       
       comparisonResult[company] = Array.from({ length: 7 }, (_, i) => {
         // Create a pattern with slight variations (±15%)
@@ -120,7 +120,7 @@ const Compare = () => {
               <Label htmlFor="from">From</Label>
               <Input
                 id="from"
-                placeholder="e.g. New York"
+                placeholder="e.g. Enugu"
                 value={fromLocation}
                 onChange={(e) => setFromLocation(e.target.value)}
               />
@@ -132,7 +132,7 @@ const Compare = () => {
               <Label htmlFor="to">To</Label>
               <Input
                 id="to"
-                placeholder="e.g. Boston"
+                placeholder="e.g. Lagos"
                 value={toLocation}
                 onChange={(e) => setToLocation(e.target.value)}
               />
